@@ -17,7 +17,7 @@ export const TestComponent: FunctionComponent = () => {
   return(
     <div>
       <div>
-        <h1>this is a test component</h1>
+        <h1 color="black">this is a test component</h1>
       </div>
       <div></div>
     </div>
