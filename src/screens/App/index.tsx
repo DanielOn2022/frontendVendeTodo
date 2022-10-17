@@ -7,8 +7,6 @@ import { theme } from "./theme";
 import { Appbar } from "../../components/Appbar";
 import { Banner } from "../../components/Banner";
 import { Footer } from "../../components/Footer";
-import { ProductList } from "../../components/CRUD/ProductList";
-import { Product } from "../../domain/Product/Product";
 import { CRUD } from "../../components/CRUD";
 
 function App() {

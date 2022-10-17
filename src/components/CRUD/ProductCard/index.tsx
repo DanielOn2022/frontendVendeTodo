@@ -13,17 +13,23 @@ import {} from '../../../assets/price-tag.png';
 
 interface Props {
   product: Product;
+  handleOnDelete: (id: number) => void;
 }
 
-export const ProductCard: FunctionComponent<Props> = ({ product }) => {
+export const ProductCard: FunctionComponent<Props> = ({ product, handleOnDelete }) => {
   const productSnapshot = product.snapshot;
+
+  const handleDelete = () => {
+    handleOnDelete(productSnapshot.id || 0);
+  }
+
   return (
     <Card sx={{ maxWidth: 300 }}>
       <CardActionArea>
         <CardMedia
           component="img"
           height="140"
-          image="../../../assets/price-tag.png"
+          image={ __dirname + "../../../assets/price-tag.png"}
           alt="price tag"
         />
         <CardContent>
@@ -42,7 +48,7 @@ export const ProductCard: FunctionComponent<Props> = ({ product }) => {
         </CardContent>
       </CardActionArea>
       <CardActions>
-        <Button size="small" color="primary">
+        <Button size="small" color="primary" onClick={handleDelete}>
           Delete
         </Button>
       </CardActions>

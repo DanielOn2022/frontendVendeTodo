@@ -24,7 +24,7 @@ export const CreateProduct = gql`
 
 export const DeleteProduct = gql`
   mutation deteleProduct($id: Int!) {
-    deleteProduct(id: 1) {
+    deleteProduct(id: $id) {
       id
       name
       brand
@@ -36,15 +36,15 @@ export const DeleteProduct = gql`
 export const UpdateProduct = gql`
   mutation updateProduct(
     $id: Int!
-    $name: string!
-    $price: number!
-    $brand: stirng!
+    $name: String!
+    $price: Int!
+    $brand: String!
   ) {
     updateProduct(
       id: $id
-      newName: $newName
-      newPrice: $newPrice
-      newBrand: $newBrand
+      newName: $name
+      newPrice: $price
+      newBrand: $brand
     ) {
       id
       name

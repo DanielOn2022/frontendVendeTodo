@@ -6,10 +6,11 @@ import { InputContainer } from "../styled";
 interface Props {
   product: Product;
   handleOnCreate: (productData: {name: string, price: number, brand: string}) => void;
+  handleOnGetById: (id: number) => void;
+  handleOnUpdate: (product: Product) => void;
 }
 
-export const ProductForm: FunctionComponent<Props> = ({product: propProduct, handleOnCreate}) => {
-
+export const ProductForm: FunctionComponent<Props> = ({product: propProduct, handleOnCreate, handleOnGetById, handleOnUpdate}) => {
   const propSnapshot = propProduct.snapshot;
   const [id, setId] = useState(propSnapshot.id ? propSnapshot.id  + '' : '');
   const [name, setName] = useState(propSnapshot.name);
@@ -27,8 +28,16 @@ export const ProductForm: FunctionComponent<Props> = ({product: propProduct, han
     handleOnCreate({brand, name, price: +price});
   }
 
+  const handleGetById = () => {
+    handleOnGetById(+id);
+  }
+
+  const handleUpdate = () => {
+    handleOnUpdate(new Product({brand, name, price: +price, id: +id}));
+  }
+
   return (
-    <Box display="grid" component="form" gap={2} padding={2}>
+    <Box display="grid" component="form" gap={2}>
       <InputContainer>
         <TextField
           id="id"
@@ -66,12 +75,12 @@ export const ProductForm: FunctionComponent<Props> = ({product: propProduct, han
           <Button variant="contained" onClick={handleCreateProduct}>Crear</Button>
         </Grid>
         <Grid item xs={6}>
-          <Button variant="contained" disabled>
+          <Button variant="contained" disabled={id ? false : true} onClick={handleUpdate}>
             Actualizar
           </Button>
         </Grid>
         <Grid item xs={6}>
-          <Button variant="contained" href="#contained-buttons">
+          <Button variant="contained" onClick={handleGetById} disabled={id ? false : true}>
             Obtener
           </Button>
         </Grid>
