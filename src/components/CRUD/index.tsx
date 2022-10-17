@@ -13,32 +13,7 @@ let formProductId: number | null;
 export const CRUD: FunctionComponent<Props> = ({}) => {
 
   const [formProduct, setFormProduct] = useState<Product>(new Product({brand: '', name: '', price: 0}));
-  const [showProducts, setShowProducts] = useState<Product[]>([
-    new Product({
-      id: 1,
-      name: "Paquete de 10 lapices numero 2",
-      brand: "Norma",
-      price: 35,
-    }),
-    new Product({
-      id: 2,
-      name: "Paquete de 10 lapices numero 2",
-      brand: "Norma",
-      price: 35,
-    }),
-    new Product({
-      id: 3,
-      name: "Paquete de 10 lapices numero 2",
-      brand: "Norma",
-      price: 35,
-    }),
-    new Product({
-      id: 4,
-      name: "Paquete de 10 lapices numero 2",
-      brand: "Norma",
-      price: 35,
-    }),
-  ]);
+  const [showProducts, setShowProducts] = useState<Product[]>([]);
 
   const [createProduct] = useMutation(CreateProduct);
   const [deleteProdcut] = useMutation(DeleteProduct);
@@ -57,12 +32,13 @@ export const CRUD: FunctionComponent<Props> = ({}) => {
     
     const { name: newName, brand: newBrand, price: newPrice, id } = responseCreateProduct.data.createProduct;
     const newProduct = new Product({brand: newBrand, name: newName, price: newPrice, id});
+    formProductId = null;
     setShowProducts([newProduct]);
   }
 
   const handleOnGetById = async (id: number) => {
     formProductId = id;
-    refetchProductById();
+    refetchProductById({ id });
   }
 
   const handleOnDelete = async (id: number) => {
@@ -92,26 +68,21 @@ export const CRUD: FunctionComponent<Props> = ({}) => {
   }
  
   const queryData = queryProductData?.singleProduct;
-  
+  let queryProduct: Product | null = null;
   if (queryData) {
-    formProductId = null;
-    const { brand, name, price, id } = queryData;
-    console.log(brand, name, price, id);
-    const product = new Product({brand, name, price, id});
-    setFormProduct(product);
-    setShowProducts([product]);
+    queryProduct = new Product({...queryData})
   }
 
   return (
     <Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2} marginBottom={10}>
-      <Box gridColumn="span 3">
+      <Box gridColumn="span 4">
         <ProductForm product={formProduct} handleOnCreate={handleOnCreate} handleOnGetById={handleOnGetById} handleOnUpdate={handleOnUpdate}/>
       </Box>
-      <Box gridColumn="span 9">
+      <Box gridColumn="span 8">
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={1}>
             <ProductList
-              products={showProducts} handleOnDelete={handleOnDelete}
+              products={queryProduct ? [queryProduct] : showProducts} handleOnDelete={handleOnDelete}
             />
           </Grid>
         </Box>

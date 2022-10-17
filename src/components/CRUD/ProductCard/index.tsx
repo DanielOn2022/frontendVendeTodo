@@ -24,7 +24,7 @@ export const ProductCard: FunctionComponent<Props> = ({ product, handleOnDelete 
   }
 
   return (
-    <Card sx={{ maxWidth: 300 }}>
+    <Card sx={{ maxWidth: 300, width: 300 }}>
       <CardActionArea>
         <CardMedia
           component="img"
