@@ -28,9 +28,10 @@ export class Product implements iEntity {
     };
   }
 
-  updateValues(newName: string, newPrice: number, newBrand: string): void {
-    this.name = newName;
-    this.price = newPrice;
-    this.brand = newBrand;
+  updateValues(data: {name?: string, price?: number, brand?: string}): void {
+    const { brand, name, price } = data;
+    this.name = name || this.name;
+    this.price = price || this.price;
+    this.brand = brand || this.brand;
   }
 }

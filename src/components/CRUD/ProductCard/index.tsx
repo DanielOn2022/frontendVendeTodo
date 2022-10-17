@@ -36,6 +36,9 @@ export const ProductCard: FunctionComponent<Props> = ({ product }) => {
           <Typography variant="body2" color="text.secondary">
             ${productSnapshot.price}
           </Typography>
+          <Typography variant="body2" color="text.secondary">
+            Id: {productSnapshot.id}
+          </Typography>
         </CardContent>
       </CardActionArea>
       <CardActions>

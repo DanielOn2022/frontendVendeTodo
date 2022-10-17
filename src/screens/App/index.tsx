@@ -23,7 +23,6 @@ function App() {
           <Appbar />
           <Banner />
           {/*
-          banner
           promotions
           title
           products
