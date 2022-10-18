@@ -53,3 +53,11 @@ export const UpdateProduct = gql`
     }
   }
 `;
+
+export const GetAllProducts = gql`
+  query getAllProducts {
+    getAllProducts {
+      id name brand price
+    }
+  }
+`;

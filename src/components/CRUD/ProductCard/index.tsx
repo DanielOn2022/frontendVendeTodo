@@ -9,7 +9,7 @@ import {
 } from "@mui/material";
 import { FunctionComponent } from "react";
 import { Product } from "../../../domain/Product/Product";
-import {} from '../../../assets/price-tag.png';
+import priceTag from '../../../assets/price-tag.png';
 
 interface Props {
   product: Product;
@@ -29,7 +29,7 @@ export const ProductCard: FunctionComponent<Props> = ({ product, handleOnDelete 
         <CardMedia
           component="img"
           height="140"
-          image={ __dirname + "../../../assets/price-tag.png"}
+          image={priceTag}
           alt="price tag"
         />
         <CardContent>
@@ -49,7 +49,7 @@ export const ProductCard: FunctionComponent<Props> = ({ product, handleOnDelete 
       </CardActionArea>
       <CardActions>
         <Button size="small" color="primary" onClick={handleDelete}>
-          Delete
+          Borrar
         </Button>
       </CardActions>
     </Card>

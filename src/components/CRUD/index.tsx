@@ -1,28 +1,35 @@
-import { useMutation, useQuery } from "@apollo/client";
-import { Box, Grid } from "@mui/material";
-import { FunctionComponent, useState } from "react";
+import { useLazyQuery, useMutation, useQuery } from "@apollo/client";
+import { Box, Grid, Typography } from "@mui/material";
+import { FunctionComponent, useEffect, useState } from "react";
 import { Product } from "../../domain/Product/Product";
 import { ProductForm } from "./ProductForm";
 import { ProductList } from "./ProductList";
-import { CreateProduct, DeleteProduct, GetProductById, UpdateProduct } from './queries';
+import { CreateProduct, DeleteProduct, GetProductById, UpdateProduct, GetAllProducts } from './queries';
+import LoopIcon from '@mui/icons-material/Loop';
 
 interface Props {}
-
-let formProductId: number | null;
 
 export const CRUD: FunctionComponent<Props> = ({}) => {
 
   const [formProduct, setFormProduct] = useState<Product>(new Product({brand: '', name: '', price: 0}));
   const [showProducts, setShowProducts] = useState<Product[]>([]);
 
+  const [singleProduct, {data: singleProductQueryData}] = useLazyQuery(GetProductById);
   const [createProduct] = useMutation(CreateProduct);
   const [deleteProdcut] = useMutation(DeleteProduct);
   const [updateProduct] = useMutation(UpdateProduct);
 
-  const { loading, error, data: queryProductData, refetch: refetchProductById } = useQuery(GetProductById, {
-    skip: formProductId ? false : true,
-    variables:{id: formProductId}
+  const { data: allProductsData, loading } = useQuery(GetAllProducts, {
+    skip: showProducts.length <= 0 ? false : true
   });
+
+  useEffect(() => {
+    if (singleProductQueryData) {
+      const fetchedProduct = new Product({...singleProductQueryData.singleProduct});
+      setShowProducts([fetchedProduct]);
+    }
+  }, [singleProductQueryData]);
+  
 
   const handleOnCreate = async (productData: {name: string, price: number, brand: string}) => {
     const { name, brand, price } = productData;
@@ -32,13 +39,11 @@ export const CRUD: FunctionComponent<Props> = ({}) => {
     
     const { name: newName, brand: newBrand, price: newPrice, id } = responseCreateProduct.data.createProduct;
     const newProduct = new Product({brand: newBrand, name: newName, price: newPrice, id});
-    formProductId = null;
     setShowProducts([newProduct]);
   }
 
   const handleOnGetById = async (id: number) => {
-    formProductId = id;
-    refetchProductById({ id });
+    singleProduct({variables: {id}});
   }
 
   const handleOnDelete = async (id: number) => {
@@ -67,10 +72,9 @@ export const CRUD: FunctionComponent<Props> = ({}) => {
     }
   }
  
-  const queryData = queryProductData?.singleProduct;
-  let queryProduct: Product | null = null;
-  if (queryData) {
-    queryProduct = new Product({...queryData})
+  if (allProductsData) {
+    const allProducts = allProductsData.getAllProducts.map((fetchedProduct: any) => new Product({...fetchedProduct})); 
+    setShowProducts(allProducts);
   }
 
   return (
@@ -81,9 +85,10 @@ export const CRUD: FunctionComponent<Props> = ({}) => {
       <Box gridColumn="span 8">
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={1}>
-            <ProductList
-              products={queryProduct ? [queryProduct] : showProducts} handleOnDelete={handleOnDelete}
-            />
+            {loading 
+              ? <LoopIcon></LoopIcon> 
+              : <ProductList products={showProducts} handleOnDelete={handleOnDelete} />
+            }
           </Grid>
         </Box>
       </Box>
