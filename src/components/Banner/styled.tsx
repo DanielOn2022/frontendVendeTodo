@@ -21,7 +21,7 @@ export const BannerContainer = styled.div`
   padding: 0px 0px;
   background-color: #C9C6C6;
   margin-top: 50px;
-  margin-bottom: 200px;
+  margin-bottom: 50px;
 `;
 
 export const BannerContent = styled.div`

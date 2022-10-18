@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { FunctionComponent } from "react";
 import { useTheme } from "styled-components";
-import { BannerContainer, BannerContainerMui, BannerContent } from "./styled";
+import { BannerContainer, BannerContent } from "./styled";
 
 interface Props {
 

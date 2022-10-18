@@ -86,7 +86,7 @@ export const CRUD: FunctionComponent<Props> = ({}) => {
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={1}>
             {loading 
-              ? <LoopIcon></LoopIcon>
+              ? <LoopIcon></LoopIcon> 
               : <ProductList products={showProducts} handleOnDelete={handleOnDelete} />
             }
           </Grid>
