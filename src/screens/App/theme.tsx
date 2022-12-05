@@ -15,6 +15,5 @@ declare module '@mui/material/styles' {
 }
 
 export const theme = createTheme({
-
 });
 

@@ -14,14 +14,19 @@ import {
   InputBaseContainer,
   ButtonContainer,
   AppbarList,
-  ListItemText
+  ListItemText,
 } from "./styled";
+import { Product } from "../../domain/Product/Product";
 
-interface Props {}
 
-export const Appbar: FunctionComponent<Props> = ({}) => {
+interface Props {
+  handleOnProductList : ()=>void
+  handleOnCreateProduct : ()=>void
+}
+
+export const Appbar: FunctionComponent<Props> = ({handleOnCreateProduct, handleOnProductList}) => {
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
       <AppBar color="primary" position="fixed">
         <Toolbar>
           <Typography
@@ -33,9 +38,10 @@ export const Appbar: FunctionComponent<Props> = ({}) => {
             Vende Todo
           </Typography>
           <ButtonContainer marginLeft="16px">
-            <AppbarList itemType="row">
-              <ListItemText primary="CRUD" />
-            </AppbarList>
+            <Button variant="text" sx={{color:"white"}} onClick={handleOnProductList}> productos</Button>
+          </ButtonContainer>
+          <ButtonContainer marginLeft="16px">
+            <Button variant="text" sx={{color:"white"}} onClick={handleOnCreateProduct}> añadir producto</Button>
           </ButtonContainer>
           <SearchContainer>
             <SearchIconWrapper>
@@ -45,6 +51,5 @@ export const Appbar: FunctionComponent<Props> = ({}) => {
           </SearchContainer>
         </Toolbar>
       </AppBar>
-    </Box>
   );
 };

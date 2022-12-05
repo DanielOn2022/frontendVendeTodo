@@ -1,20 +1,12 @@
 import { Typography } from "@mui/material";
 import { FunctionComponent } from "react";
-import { useTheme } from "styled-components";
-import { BannerContainer, BannerContent } from "./styled";
 
-interface Props {
-
-}
+interface Props {}
 
 export const Banner: FunctionComponent<Props> = ({}) => {
-  const theme = useTheme()
-
   return (
-    <BannerContainer>
-      <BannerContent>
-        <Typography variant="h6">Bienvenido a Vende Todo</Typography>
-      </BannerContent>
-    </BannerContainer>
-  )
-}
+    <Typography variant="h6" color="primary" textAlign="center" marginTop={12} marginBottom={5}>
+      Vende Todo, <i>vende todo tipo de productos no pedecederos</i>
+    </Typography>
+  );
+};

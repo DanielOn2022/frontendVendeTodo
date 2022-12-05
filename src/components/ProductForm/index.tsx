@@ -1,7 +1,6 @@
-import { Box, Button, Grid, TextField, Stack, Divider } from "@mui/material";
+import { Button, TextField, Stack, Divider } from "@mui/material";
 import { ChangeEvent, FunctionComponent, useState } from "react";
-import { Product } from "../../../domain/Product/Product";
-import { InputContainer } from "../styled";
+import { Product } from "../../domain/Product/Product";
 
 interface Props {
   product: Product;

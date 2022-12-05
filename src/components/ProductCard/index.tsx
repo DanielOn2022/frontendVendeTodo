@@ -8,12 +8,12 @@ import {
   Typography,
 } from "@mui/material";
 import { FunctionComponent } from "react";
-import { Product } from "../../../domain/Product/Product";
-import priceTag from '../../../assets/price-tag.png';
+import { Product } from "../../domain/Product/Product";
+import priceTag from '../../assets/price-tag.png';
 
 interface Props {
   product: Product;
-  handleOnDelete: (id: number) => void;
+  handleOnDelete: (id: number) => void  ;
 }
 
 export const ProductCard: FunctionComponent<Props> = ({ product, handleOnDelete }) => {
@@ -24,11 +24,11 @@ export const ProductCard: FunctionComponent<Props> = ({ product, handleOnDelete 
   }
 
   return (
-    <Card sx={{ maxWidth: 300, width: 300 }}>
+    <Card sx={{ maxWidth: "auto", width: "auto" }}>
       <CardActionArea>
         <CardMedia
           component="img"
-          height="140"
+          height="auto"
           image={priceTag}
           alt="price tag"
         />
