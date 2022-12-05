@@ -1,36 +1,28 @@
 import { ApolloProvider } from "@apollo/client";
 import client from "../../api";
-import { TestComponent } from "../../components/TestComponent";
-import { Button, Container, ThemeProvider } from "@mui/material";
+import { ThemeProvider } from "@mui/material";
 import { useEffect } from "react";
 import { theme } from "./theme";
-import { Appbar } from "../../components/Appbar";
-import { Banner } from "../../components/Banner";
-import { Footer } from "../../components/Footer";
-import { CRUD } from "../../components/CRUD";
+import { NavigationContainer } from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { Home } from '../Home'
 
 function App() {
+
   useEffect(() => {
     document.title = "Vende Todo";
   }, []);
 
+  const Stack = createNativeStackNavigator();
+
   return (
     <ApolloProvider {...{ client }}>
       <ThemeProvider theme={theme}>
-        <Container maxWidth={"xl"} sx={{ background: "#fff" }}>
-          <Appbar />
-          <Banner />
-          {/*
-          promotions
-          title
-          products
-          footer
-          searchbox
-          appdrawer
-          */}
-          <CRUD />
-          <Footer />
-        </Container>
+        <NavigationContainer>
+          <Stack.Navigator>
+            <Stack.Screen name="Home" component={Home} />
+          </Stack.Navigator>
+        </NavigationContainer>
       </ThemeProvider>
     </ApolloProvider>
   );
