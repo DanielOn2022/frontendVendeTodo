@@ -21,7 +21,7 @@ function App() {
     <ApolloProvider {...{ client }}>
       <ThemeProvider theme={theme}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Login">
+          <Stack.Navigator initialRouteName="Home">
             <Stack.Screen name="Signin" component={Signin} />
             <Stack.Screen name="Login" component={Login} />
             <Stack.Screen name="Home" component={Home} />

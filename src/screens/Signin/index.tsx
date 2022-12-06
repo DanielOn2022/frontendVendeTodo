@@ -1,4 +1,5 @@
 import { Container, Button, Stack, TextField } from "@mui/material";
+import logo from "../../assets/logo.png";
 
 export function Signin({navigation}: {navigation: any}) {
 
@@ -14,13 +15,13 @@ export function Signin({navigation}: {navigation: any}) {
         alignItems="center"
         spacing={2}
       >
-        <img src="logo.jpg" height="150" width="250" />
+        <img src={logo} height="150" width="250" />
         <Stack spacing={2} width={450}>
           <TextField id="email" label="Email" />
           <TextField id="name" label="Name" />
           <TextField id="lastname" label="Lastname" />
           <TextField id="password" label="Password" />
-          <TextField id="cellphone" label="Cellpone" />
+          <TextField id="cellphone" label="Cellphone" />
         </Stack>
         <Button variant="outlined" style={{ width: 100 }} onClick={onSignin}>
           Sign in
