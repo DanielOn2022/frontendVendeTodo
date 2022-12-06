@@ -1,28 +1,40 @@
-import { Grid } from "@mui/material";
-import { FunctionComponent } from "react";
+import { Grid, Container } from "@mui/material";
 import { Product } from "../../domain/Product/Product";
 import { ProductCard } from "../ProductCard";
+import { FunctionComponent } from "react";
+import {  useQuery } from "@apollo/client";
+import {
+  GetAllProducts,
+} from "./queries";
 
 interface Props {
-  products?: Product[] | [];
-  handleOnDelete: (id: number) => void;
+  handleOnSelectProduct: (producto:Product) => void;
+  handleOnDeleteProduct: () => void;
 }
 
 export const ProductList: FunctionComponent<Props> = ({
-  products,
-  handleOnDelete,
+  handleOnSelectProduct, 
+  handleOnDeleteProduct
 }) => {
+  var products: Product[] = [];
+
+  const { data: allProductsData, loading } = useQuery(GetAllProducts);
+
+  if (allProductsData) {
+    products = allProductsData.getAllProducts.map(
+      (fetchedProduct: any) => new Product({ ...fetchedProduct })
+    );
+  }
+
   return (
-    <Grid container spacing={5} columns={{ xs: 4, md: 12 }}>
-      {products?.map((product) => (
-        <Grid item xs={4}>
-          <ProductCard
-            product={product}
-            key={product.snapshot.id}
-            handleOnDelete={handleOnDelete}
-          />
-        </Grid>
-      ))}
-    </Grid>
+    <Container maxWidth="md">
+      <Grid container spacing={5} columns={{ xs: 4, md: 12 }}>
+        {products?.map((product) => (
+          <Grid item xs={4}>
+            <ProductCard product={product} handleOnSelectProduct={handleOnSelectProduct} handleOnDeleteProduct={handleOnDeleteProduct}/>
+          </Grid>
+        ))}
+      </Grid>
+    </Container>
   );
 };

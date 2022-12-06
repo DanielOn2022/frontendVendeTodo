@@ -6,10 +6,9 @@ import { theme } from "./theme";
 import { Appbar } from "../../components/Appbar";
 import { Banner } from "../../components/Banner";
 import { Footer } from "../../components/Footer";
-import { ProductForm2 } from "../../components/ProductForm2";
-import { ProductList2 } from "../../components/ProductList2";
+import { ProductForm } from "../../components/ProductForm";
+import { ProductList } from "../../components/ProductList";
 import { Product } from "../../domain/Product/Product";
-import { CreateProduct } from "../../components/MainContent/queries";
 
 class App extends Component<
   {},
@@ -68,14 +67,14 @@ class App extends Component<
           />
           <Banner />
           {showProducts ? (
-            <ProductList2 handleOnSelectProduct={handleOnSelectProduct} handleOnDeleteProduct={handleOnDeleteProduct}/>
+            <ProductList handleOnSelectProduct={handleOnSelectProduct} handleOnDeleteProduct={handleOnDeleteProduct}/>
           ) : createProduct ? (
-            <ProductForm2
+            <ProductForm
               product={new Product({ brand: "", name: "", price: 0 })}
               action="create"
             />
           ) : selectedProduct ? (
-            <ProductForm2 product={selectedProduct} action="update" />
+            <ProductForm product={selectedProduct} action="update" />
           ) : (
             <h1>ERROR</h1>
           )}

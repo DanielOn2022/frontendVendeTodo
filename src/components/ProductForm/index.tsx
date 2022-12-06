@@ -1,31 +1,46 @@
-import { Button, TextField, Stack, Divider } from "@mui/material";
+import { Button, TextField, Stack, Divider, Container, ButtonGroup } from "@mui/material";
 import { ChangeEvent, FunctionComponent, useState } from "react";
 import { Product } from "../../domain/Product/Product";
+import { useMutation } from "@apollo/client";
+import {
+  CreateProduct,
+  DeleteProduct,
+  GetProductById,
+  UpdateProduct,
+  GetAllProducts,
+} from "./queries";
 
 interface Props {
   product: Product;
-  handleOnCreate: (productData: {
-    name: string;
-    price: number;
-    brand: string;
-  }) => void;
-  handleOnGetById: (id: number) => void;
-  handleOnUpdate: (product: Product) => void;
+  action: String;
 }
 
 export const ProductForm: FunctionComponent<Props> = ({
   product: propProduct,
-  handleOnCreate,
-  handleOnGetById,
-  handleOnUpdate,
+  action,
 }) => {
   const propSnapshot = propProduct.snapshot;
   const [id, setId] = useState(propSnapshot.id ? propSnapshot.id + "" : "");
-  const [name, setName] = useState(propSnapshot.name);
-  const [brand, setBrand] = useState(propSnapshot.brand);
+  const [name, setName] = useState(propSnapshot.name ? propSnapshot.name : "");
+  const [brand, setBrand] = useState(
+    propSnapshot.brand ? propSnapshot.brand : ""
+  );
   const [price, setPrice] = useState(
     propSnapshot.price ? propSnapshot.price + "" : ""
   );
+
+  const [createProduct] = useMutation(CreateProduct);
+  const [deleteProduct] = useMutation(DeleteProduct);
+  const [updateProduct] = useMutation(UpdateProduct);
+
+  const handleOnDelete = async (id: number) => {
+    const responseDeleteProduct = await deleteProduct({
+      variables: { id },
+    });
+
+    if (responseDeleteProduct.data.deleteProduct) {
+    }
+  };
 
   const handleChange = ({
     target: { id, value },
@@ -36,76 +51,110 @@ export const ProductForm: FunctionComponent<Props> = ({
     if (id === "price") setPrice(value);
   };
 
-  const handleCreateProduct = () => {
-    handleOnCreate({ brand, name, price: +price });
+  const handleCreateProduct = async () => {
+    const responseCreateProduct = await createProduct({
+      variables: { name, brand, price },
+    });
+
+    const {
+      name: newName,
+      brand: newBrand,
+      price: newPrice,
+      id,
+    } = responseCreateProduct.data.createProduct;
+    const newProduct = new Product({
+      brand: newBrand,
+      name: newName,
+      price: newPrice,
+      id,
+    });
   };
 
-  const handleGetById = () => {
-    handleOnGetById(+id);
-  };
+  const handleUpdate = async () => {
+    const responseUpdateProduct = await updateProduct({
+      variables: {
+        id: +id,
+        name: name,
+        price: +price,
+        brand: brand,
+      },
+    });
 
-  const handleUpdate = () => {
-    handleOnUpdate(new Product({ brand, name, price: +price, id: +id }));
+    if (responseUpdateProduct.data.updateProduct) {
+      const {
+        name: newName,
+        brand: newBrand,
+        price: newPrice,
+        id,
+      } = responseUpdateProduct.data.updateProduct;
+      const newProduct = new Product({
+        brand: newBrand,
+        name: newName,
+        price: newPrice,
+        id,
+      });
+    }
   };
 
   return (
-    <Stack spacing={2} maxWidth={350}>
-      <Stack spacing={2}>
-        <TextField
-          id="id"
-          label="Id"
-          value={id}
-          type={"number"}
-          onChange={handleChange}
-        />
-        <TextField
-          id="name"
-          label="Nombre"
-          value={name}
-          onChange={handleChange}
-        />
-        <TextField
-          id="brand"
-          label="Marca"
-          value={brand}
-          onChange={handleChange}
-        />
-        <TextField
-          id="price"
-          label="Precio"
-          value={price}
-          type={"number"}
-          onChange={handleChange}
-        />
-      </Stack>
-      <Stack
-        direction="row"
-        spacing={2}
-        divider={<Divider orientation="vertical" flexItem />}
-        justifyContent="center"
-      >
+    <Stack spacing={2} alignItems="center">
+      <Container maxWidth="sm">
+        <Stack spacing={2}>
+          <TextField
+            id="id"
+            label="Id"
+            value={id}
+            type={"number"}
+            onChange={handleChange}
+            disabled={action == "update" ? true : false}
+          />
+          <TextField
+            id="name"
+            label="Nombre"
+            value={name}
+            onChange={handleChange}
+          />
+          <TextField
+            id="brand"
+            label="Marca"
+            value={brand}
+            onChange={handleChange}
+          />
+          <TextField
+            id="price"
+            label="Precio"
+            value={price}
+            type={"number"}
+            onChange={handleChange}
+          />
+        </Stack>
+      </Container>
+      {action == "create" ? (
         <Button
           variant="contained"
           onClick={handleCreateProduct}
           disabled={id ? true : false}
+          sx={{ width: "auto" }}
         >
           Crear
         </Button>
-        <Button
-          variant="contained"
-          disabled={id ? false : true}
-          onClick={handleUpdate}
-        >
-          Actualizar
-        </Button>
-        <Button
-          variant="contained"
-          onClick={handleGetById}
-          disabled={id ? false : true}
-        >
-          Obtener
-        </Button>
-      </Stack>
+      ) : (
+        <ButtonGroup>
+          <Button
+            variant="contained"
+            sx={{ width: "auto" }}
+          >
+            modificar
+          </Button>
+          <Button
+            variant="contained"
+            color="warning"
+            sx={{ width: "auto" }}
+          >
+            eliminar
+          </Button>
+        </ButtonGroup>
+      )}
     </Stack>
   );
 };
