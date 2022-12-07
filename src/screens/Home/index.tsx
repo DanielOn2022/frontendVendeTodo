@@ -1,26 +1,20 @@
+import { Container } from "@mui/material";
 import { Appbar } from "../../components/Appbar";
 import { Banner } from "../../components/Banner";
 import { Footer } from "../../components/Footer";
-import { CRUD } from "../../components/CRUD";
-import { TestComponent } from "../../components/TestComponent";
-import { Button, Container } from "@mui/material";
+import { ProductList } from "../../components/ProductList";
+import { useState } from "react";
 
-export function Home() {
+export function Home(navigation: { navigation: any }) {
+  const [searchedProduct,setSearchedProduct] = useState("");
+  const state = {searchedProduct,setSearchedProduct};
+  
   return (
-    <Container maxWidth={"xl"} sx={{ background: "#fff" }}>
-      <Appbar />
-      <Banner />
-      {/*
-      promotions
-      title
-      products
-      footer
-      searchbox
-      appdrawer
-    */}
-      <CRUD />
-      <Footer />
-    </Container>
+      <Container maxWidth={"xl"} sx={{ background: "#fff" }}>
+        <Appbar state={state}/>
+        <Banner />
+        <ProductList state={state} />
+        <Footer />
+      </Container>
   );
 }
-

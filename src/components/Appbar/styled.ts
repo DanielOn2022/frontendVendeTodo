@@ -42,7 +42,7 @@ export const InputBaseContainer = MuiStyled(InputBase)(({ theme }) => ({
     transition: theme.transitions.create("width"),
     width: "100%",
     [theme.breakpoints.up("md")]: {
-      width: "20ch",
+      width: "40ch",
     },
   },
 }));
@@ -50,8 +50,8 @@ export const InputBaseContainer = MuiStyled(InputBase)(({ theme }) => ({
 export const AppbarList = MuiStyled(List)(({ itemType }) => ({
   display: itemType === 'row' ? 'flex' : 'block',
   flexGrow: 3,
-  justifyContent: 'center',
-  alignItems: 'center'
+  justifyContent: 'space-between',
+  alignItems: 'left'
 }));
 
 export const ListItemText = MuiStyled(MuiListItemText)(({ theme }) => ({
