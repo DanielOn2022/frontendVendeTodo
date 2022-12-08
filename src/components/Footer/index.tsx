@@ -12,6 +12,8 @@ export const Footer: FunctionComponent<Props> = ({}) => {
         pt: 4,
         pb: 4,
         marginTop: 12,
+        width: "100%",
+        padding:0,
       }}
     >
       <Grid container spacing={2} justifyContent="center">
@@ -59,58 +61,3 @@ export const Footer: FunctionComponent<Props> = ({}) => {
     </Box>
   );
 };
-
-/*import {
-  Box,
-  Grid,
-  List,
-  ListItemText,
-  Typography,
-  Stack,
-  BottomNavigation,
-} from "@mui/material";
-import { FunctionComponent } from "react";
-
-interface Props {}
-
-export const Footer: FunctionComponent<Props> = ({}) => {
-  return (
-    <Box
-      sx={{
-        background: "AliceBlue",
-        pt: 4,
-        pb: 3,
-        marginTop: 8,
-        position: "fixed",
-        bottom: 0,
-        width: "100%",
-      }}
-    >
-      <Grid container spacing={2} justifyContent="center">
-        <Stack direction="row" spacing={3}>
-          <Stack direction="column">
-            <Typography variant="body1">
-              Ing Web / Proyecto Integrador
-            </Typography>
-            <Typography variant="caption">
-              Dr. Celemente Garcia Gerardo
-            </Typography>
-            <Typography variant="caption">
-              Martha Estela Valenzuela Tirado
-            </Typography>
-          </Stack>
-          <Stack direction="column">
-            <Typography variant="body1">Integrantes:</Typography>
-            <Typography variant="caption">Cordero Vazquez Kenia</Typography>
-            <Typography variant="caption">
-              Espinosa Lopez Daniel Alejandro
-            </Typography>
-            <Typography variant="caption">Espinoza Perea Anidene</Typography>
-            <Typography variant="caption">Leon Molina Elevier Amin</Typography>
-          </Stack>
-        </Stack>
-      </Grid>
-    </Box>
-  );
-};
-*/

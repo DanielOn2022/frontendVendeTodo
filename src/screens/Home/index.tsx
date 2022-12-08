@@ -5,13 +5,14 @@ import { Footer } from "../../components/Footer";
 import { ProductList } from "../../components/ProductList";
 import { useState } from "react";
 
-export function Home(navigation: { navigation: any }) {
+export function Home(props:any) {
   const [searchedProduct,setSearchedProduct] = useState("");
-  const state = {searchedProduct,setSearchedProduct};
+  const state = {searchedProduct,setSearchedProduct, ...props.globalState};
+  console.log("props -> ",props)
   
   return (
-      <Container maxWidth={"xl"} sx={{ background: "#fff" }}>
-        <Appbar state={state}/>
+      <Container maxWidth={false} disableGutters style={{ background: "white", marginTop: 16}}>
+        <Appbar state={state} />
         <Banner />
         <ProductList state={state} />
         <Footer />

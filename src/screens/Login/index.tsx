@@ -6,10 +6,13 @@ import { login } from "./queries";
 import { useMutation } from "@apollo/client";
 import { ChangeEvent, useState } from "react";
 
-export function Login({ navigation }: { navigation: any }, loginType: String) {
+export function Login(props:any) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [loginUser] = useMutation(login);
+  const {navigation } = props
+  const { globalState, loginType } = props.route.params;
+  const [ user, setUser] = globalState;
 
   const navigateSignin = () => {
     navigation.navigate("Signin");
@@ -22,7 +25,13 @@ export function Login({ navigation }: { navigation: any }, loginType: String) {
   const onLogin = async (email: String, password: String) => {
     const loggedUser = await loginUser({ variables: { email, password } });
     localStorage.setItem("token", loggedUser.data.login.token);
-    navigation.navigate("Home");
+    setUser(loggedUser);
+    if(loginType=="client"){
+      navigation.navigate("Home");
+    }
+    else{
+      navigation.navigate("Suplier");
+    }
   };
 
   const onChangeEmail = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -34,7 +43,7 @@ export function Login({ navigation }: { navigation: any }, loginType: String) {
   };
 
   return (
-    <Container maxWidth={"md"} sx={{ background: "#fff", paddingY: 8 }}>
+    <Container sx={{ background: "#fff", paddingY: 8, paddingX:0 }}>
       <Button onClick={goBack}>
         <ArrowBack />
       </Button>

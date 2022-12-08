@@ -8,7 +8,7 @@ export const BannerContainerMui = MuiStyled(Box)(() => ({
   justifyContent: 'center',
   width: '100px',
   height: '100px',
-  marginTop: 150,
+  marginTop:16,
 }));
 
 

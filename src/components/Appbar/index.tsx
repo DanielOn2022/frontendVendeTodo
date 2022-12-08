@@ -13,7 +13,6 @@ import { styles } from "./styles";
 import { ShoppingCart } from "@mui/icons-material";
 import { Container } from "@mui/system";
 import { useState } from "react";
-import { TextInput } from "react-native";
 
 export function Appbar(props: any) {
   const navigation = useContext(NavigationContext);
