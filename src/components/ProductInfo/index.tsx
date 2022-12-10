@@ -1,7 +1,6 @@
 import { NavigationContext } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
-import priceTag from "../../assets/price-tag.png";
-import { GetSingleProduct } from "./queries";
+import { addToCart, getCart, GetSingleProduct, islogged } from "./queries";
 import {
   Typography,
   Stack,
@@ -10,12 +9,16 @@ import {
   Container,
   Button,
 } from "@mui/material";
-import { useQuery } from "@apollo/client";
+import { useMutation, useQuery } from "@apollo/client";
 
 export function ProductInfo(props: any) {
   const product = props.product;
   const productSnapshot = product.snapshot;
   const navigation = useContext(NavigationContext);
+  const { data: userData } = useQuery(islogged, {
+    fetchPolicy: "network-only",
+  });
+  const { data: userCart, error:errorCart } = useQuery(getCart);
   const { data: ProductDetail, loading } = useQuery(GetSingleProduct, {
     variables: {
       id: productSnapshot.id,
@@ -29,21 +32,48 @@ export function ProductInfo(props: any) {
 
   console.log(
     "PRODUCTDETAIL -> ",
-    loading ? "cargando" : ProductDetail.singleProduct.suppliers
+    loading ? "cargando" : ProductDetail.singleProduct.suppliers[0].company
   );
+  console.log("USERDATACART: ",userData);
 
-  const [suplier, setSuplier] = useState(defaultSuplier);
+  const [supplier, setSupplier] = useState(defaultSuplier);
+  const [amount, setAmount] = useState("1");
+  const [addCartLine,{data:addedCartLine}] = useMutation(addToCart);
 
   useEffect(() => {
     if (!loading) {
       defaultSuplier = ProductDetail.singleProduct.suppliers[0].company;
-      setSuplier(defaultSuplier);
+      setSupplier(defaultSuplier);
     }
   }, [loading]);
 
-  const onKeyDownSuplier = (e: React.KeyboardEvent<HTMLDivElement>) => {
-    console.log(suplier);
-    setSuplier(suplier);
+  const onChangeAmount = (e: any) => {
+    console.log("TARGET->", e.target.value);
+    if (e.target.value >= 0) {
+      setAmount(e.target.value);
+    }
+  };
+
+  const onChangeSupplier = (e: any, newValue: any) => {
+    setSupplier(newValue);
+  };
+
+  const handleOnAddToCart = async () => {
+    const supplierId = ProductDetail.singleProduct.suppliers.filter(
+      (s: any) => s.company == supplier
+    )[0].id;
+    console.log("SUPP->",supplierId, supplier);
+    const addedLine = await addCartLine({
+      variables: {
+        quantity: parseInt(amount),
+        supplierId: parseInt(supplierId),
+        productId: ProductDetail.singleProduct.id,
+        price: ProductDetail.singleProduct.price,
+        name: ProductDetail.singleProduct.name,
+        cartId: userCart.getCart.id,
+        lastUpdate: userCart.getCart.lastUpdate,
+      },
+    });
   };
 
   return (
@@ -121,8 +151,8 @@ export function ProductInfo(props: any) {
                       }}
                     />
                   )}
-                  value={suplier}
-                  onKeyDown={onKeyDownSuplier}
+                  value={supplier}
+                  onChange={onChangeSupplier}
                 />
               </Stack>
               <Stack direction="row" alignItems="center">
@@ -136,14 +166,17 @@ export function ProductInfo(props: any) {
                 </Typography>
                 <TextField
                   type="number"
-                  defaultValue={"1"}
+                  value={amount}
                   size="small"
                   style={{ width: 65 }}
+                  onChange={onChangeAmount}
                 ></TextField>
               </Stack>
-              <Button variant="contained" style={{ marginTop: 32, width: 200 }}>
+              <Button variant="contained" style={{ marginTop: 32, width: 200 }} onClick={handleOnAddToCart}>
                 Add to my cart
               </Button>
+              {addedCartLine && <Typography sx={{color:"green"}}>Successfully added product</Typography>}
+              {errorCart && <Typography sx={{color:"red"}} textAlign="center">{errorCart.message}</Typography>}
             </Stack>
           </Stack>
           <Stack direction="column" minWidth="85%" spacing={1}>
