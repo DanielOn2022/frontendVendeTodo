@@ -1,4 +1,4 @@
-import { Container, Button, Stack, TextField } from "@mui/material";
+import { Container, Button, Stack, TextField, Typography } from "@mui/material";
 import logo from "../../assets/logo.png";
 import { ArrowBack } from "@mui/icons-material";
 import { styles } from "./styles";
@@ -13,7 +13,7 @@ export function Signin({navigation}: {navigation: any}) {
   const [lastname, setLastname] = useState("");  
   const [password, setPassword] = useState("");  
   const [cellphone, setCellphone] = useState("");  
-  const [registerUser] = useMutation(register);
+  const [registerUser,{error}] = useMutation(register);
 
   const onChangeEmail = (e: ChangeEvent<HTMLTextAreaElement>) => {
     setEmail(e.target.value);
@@ -59,6 +59,7 @@ export function Signin({navigation}: {navigation: any}) {
           <TextField value={password} id="password" label="Password" type="password" onChange={onChangePassword}/>
           <TextField value={cellphone} id="cellphone" label="Cellphone" onChange={onChangeCellphone}/>
         </Stack>
+        {error && <Typography sx={{color:"red"}} textAlign="center">{error.message}</Typography>}
         <Button variant="outlined" style={{ width: 100 }} onClick={()=>onSignin(email,name,lastname,password,cellphone)}>
           Sign in
         </Button>

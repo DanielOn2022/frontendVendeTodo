@@ -9,7 +9,7 @@ import { ChangeEvent, useState } from "react";
 export function Login(props: any) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [loginUser] = useMutation(login);
+  const [loginUser, { data, loading, error }] = useMutation(login);
   const { navigation } = props;
   const { loginType } = props.route.params;
 
@@ -22,15 +22,20 @@ export function Login(props: any) {
   };
 
   const onLogin = async (email: String, password: String) => {
-    const loggedUser = await loginUser({ variables: { email, password } });
-    localStorage.setItem("token", loggedUser.data.login.token);
-    console.log("USER==",loggedUser);
-    if (loginType == "client") {
-      navigation.navigate("Home",{searchedProduct: ""});
-    } else {
-      navigation.navigate("Suplier");
+    try {
+      const loggedUser = await loginUser({ variables: { email, password } });
+      localStorage.setItem("token", loggedUser.data.login.token);
+      console.log("USER==", loggedUser);
+      if (loginType == "client") {
+        navigation.navigate("Home", { searchedProduct: "" });
+      } else {
+        navigation.navigate("Suplier");
+      }
+      window.location.reload();
+    } catch (e) {
+      console.log("e: ", e);
+      if (error) console.log("error: ", error);
     }
-    window.location.reload();
   };
 
   const onChangeEmail = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -68,6 +73,7 @@ export function Login(props: any) {
               value={password}
               onChange={onChangePassword}
             />
+            {error && <Typography sx={{color:"red"}} textAlign="center">{error.message}</Typography>}
           </Stack>
           <Button
             variant="outlined"
