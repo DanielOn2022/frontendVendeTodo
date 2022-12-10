@@ -18,8 +18,8 @@ export function ProductInfo(props: any) {
   const { data: userData } = useQuery(islogged, {
     fetchPolicy: "network-only",
   });
-  const { data: userCart, error: errorCart } = useQuery(getCart);
-  const { data: ProductDetail, loading } = useQuery(GetSingleProduct, {
+  const { data: userCart } = useQuery(getCart);
+  const { data: ProductDetail, loading, error: errorCart } = useQuery(GetSingleProduct, {
     variables: {
       id: productSnapshot.id,
       name: productSnapshot.name,
@@ -54,7 +54,7 @@ export function ProductInfo(props: any) {
         ].company;
       setSupplier(defaultSuplier);
     }
-  }, [loading]);
+  }, [loading])
 
   const onChangeAmount = (e: any) => {
     console.log("TARGET->", e.target.value);
@@ -194,7 +194,7 @@ export function ProductInfo(props: any) {
                 </Typography>
               )}
               {errorCart && (
-                <Typography sx={{ color: "red" }} textAlign="center">
+                <Typography sx={{ color: "red" }} >
                   {errorCart.message}
                 </Typography>
               )}
