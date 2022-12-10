@@ -15,13 +15,11 @@ import { Container } from "@mui/system";
 
 export function ProductCard(props: any) {
   const product = props.product;
-  const { selectedProduct, setSelectedProduct } = props.state;
+  console.log("PRODCARD:", product)
   const productSnapshot = product.snapshot;
   const navigation = useContext(NavigationContext);
 
   const handleOnSelectProduct = () => {
-    setSelectedProduct(product);
-    console.log(selectedProduct);
     navigation?.navigate("ProductDetail", {product:product });
   };
 
@@ -39,7 +37,7 @@ export function ProductCard(props: any) {
           <CardMedia
             component="img"
             height="auto"
-            image={priceTag}
+            image={productSnapshot.imageUrl}
             alt="price tag"
           />
           <div>

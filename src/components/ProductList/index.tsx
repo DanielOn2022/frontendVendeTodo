@@ -5,16 +5,10 @@ import {  useQuery } from "@apollo/client";
 import {
   GetProductsByName
 } from "./queries";
-import { useState } from "react";
-
 
 export function ProductList (props:any) {
   var products: Product[] = [];
-  
-  const [selectedProduct, setSelectedProduct] = useState(undefined);
-  const state = {selectedProduct,setSelectedProduct}; 
-
-  var searchedProduct = props.state.searchedProduct;
+  var searchedProduct = props.searchedProduct;
   
   const { data: allProductsData, loading } = useQuery(GetProductsByName,{variables:{name:searchedProduct}});
 
@@ -24,13 +18,13 @@ export function ProductList (props:any) {
       (fetchedProduct: any) => new Product({ ...fetchedProduct })
     );
   }
-  
+
   return (
-    <Container maxWidth="lg">
-      <Grid container spacing={5} columns={{ xs: 4, md: 12 }}>
+    <Container maxWidth="xl">
+      <Grid container spacing={2} columns={{ xs: 4, md: 12 }}>
         {products?.map((product) => (
           <Grid item xs={4}>
-            <ProductCard product={product} state={state} />
+            <ProductCard product={product}/>
           </Grid>
         ))}
       </Grid>

@@ -10,6 +10,7 @@ import { Login } from "../Login";
 import { Signin } from "../Signin";
 import { ProductDetail } from "../ProductDetail";
 import { Suplier } from "../suplier";
+import { ShoppingCart } from "../ShoppingCart";
 
 function App() {
   useEffect(() => {
@@ -17,22 +18,21 @@ function App() {
   }, []);
 
   const Stack = createNativeStackNavigator();
-  const [user, setUser] = useState(undefined);
-  const state = {user, setUser};
 
   return (
     <ApolloProvider {...{ client }}>
       <ThemeProvider theme={theme}>
         <NavigationContainer>
           <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen name="Signin" component={Signin} initialParams={{ globalState:state }} />
-            <Stack.Screen name="Login" component={Login} initialParams={{ globalState:state }} />
-            <Stack.Screen name="Home" component={Home} initialParams={{ globalState:state }} />
-            <Stack.Screen name="Suplier" component={Suplier} initialParams={{ globalState:state }} />
+            <Stack.Screen name="Signin" component={Signin} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Home" component={Home} initialParams={{ searchedProduct:"" }} />
+            <Stack.Screen name="Suplier" component={Suplier} />
+            <Stack.Screen name="ShoppingCart" component={ShoppingCart}></Stack.Screen>
             <Stack.Screen
               name="ProductDetail"
               component={ProductDetail}
-              initialParams={{ product: undefined, globalState:state }}
+              initialParams={{ product: undefined}}
             />
           </Stack.Navigator>
         </NavigationContainer>

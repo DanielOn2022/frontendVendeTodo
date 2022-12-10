@@ -1,21 +1,18 @@
 import { Container } from "@mui/material";
 import { Appbar } from "../../components/Appbar";
 import { Banner } from "../../components/Banner";
-import { Footer } from "../../components/Footer";
 import { ProductList } from "../../components/ProductList";
 import { useState } from "react";
 
 export function Home(props:any) {
-  const [searchedProduct,setSearchedProduct] = useState("");
-  const state = {searchedProduct,setSearchedProduct, ...props.globalState};
-  console.log("props -> ",props)
+  const searchedProduct = props.route.params.searchedProduct;
+  console.log("PROPS SEARCHEDPROD -> ",searchedProduct)
   
   return (
-      <Container maxWidth={false} disableGutters style={{ background: "white", marginTop: 16}}>
-        <Appbar state={state} />
+      <Container maxWidth={false} disableGutters style={{ background: "white", paddingBottom: 24}}>
+        <Appbar searchedProduct={""}/>
         <Banner />
-        <ProductList state={state} />
-        <Footer />
+        <ProductList searchedProduct={searchedProduct} />
       </Container>
   );
 }

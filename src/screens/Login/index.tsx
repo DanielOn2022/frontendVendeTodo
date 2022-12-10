@@ -6,13 +6,12 @@ import { login } from "./queries";
 import { useMutation } from "@apollo/client";
 import { ChangeEvent, useState } from "react";
 
-export function Login(props:any) {
+export function Login(props: any) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
   const [loginUser] = useMutation(login);
-  const {navigation } = props
-  const { globalState, loginType } = props.route.params;
-  const [ user, setUser] = globalState;
+  const { navigation } = props;
+  const { loginType } = props.route.params;
 
   const navigateSignin = () => {
     navigation.navigate("Signin");
@@ -25,13 +24,13 @@ export function Login(props:any) {
   const onLogin = async (email: String, password: String) => {
     const loggedUser = await loginUser({ variables: { email, password } });
     localStorage.setItem("token", loggedUser.data.login.token);
-    setUser(loggedUser);
-    if(loginType=="client"){
-      navigation.navigate("Home");
-    }
-    else{
+    console.log("USER==",loggedUser);
+    if (loginType == "client") {
+      navigation.navigate("Home",{searchedProduct: ""});
+    } else {
       navigation.navigate("Suplier");
     }
+    window.location.reload();
   };
 
   const onChangeEmail = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -43,7 +42,7 @@ export function Login(props:any) {
   };
 
   return (
-    <Container sx={{ background: "#fff", paddingY: 8, paddingX:0 }}>
+    <Container sx={{ background: "#fff", paddingY: 8, paddingX: 0 }}>
       <Button onClick={goBack}>
         <ArrowBack />
       </Button>
@@ -78,7 +77,7 @@ export function Login(props:any) {
             Log in
           </Button>
           {loginType == "client" && (
-            <div>
+            <Stack justifyContent="center" alignItems="center">
               <Typography>Do not have an account?</Typography>
               <Button
                 variant="outlined"
@@ -87,7 +86,7 @@ export function Login(props:any) {
               >
                 Sign in
               </Button>
-            </div>
+            </Stack>
           )}
         </Stack>
       </Container>

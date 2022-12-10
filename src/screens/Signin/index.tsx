@@ -34,7 +34,8 @@ export function Signin({navigation}: {navigation: any}) {
   const onSignin = async (email:String,name:String,lastname:String,password:String,cellphone:String)=>{
     const registeredUser = await registerUser({ variables: { email, name, lastname, password, cellphone} });
     localStorage.setItem("token", registeredUser.data.register.token);
-    navigation.navigate("Home");
+    navigation.navigate("Home",{searchedProduct: ""});
+    window.location.reload();
   };
   
   const goBack = () =>{
