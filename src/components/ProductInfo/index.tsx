@@ -18,7 +18,7 @@ export function ProductInfo(props: any) {
   const { data: userData } = useQuery(islogged, {
     fetchPolicy: "network-only",
   });
-  const { data: userCart, error:errorCart } = useQuery(getCart);
+  const { data: userCart, error: errorCart } = useQuery(getCart);
   const { data: ProductDetail, loading } = useQuery(GetSingleProduct, {
     variables: {
       id: productSnapshot.id,
@@ -27,22 +27,31 @@ export function ProductInfo(props: any) {
     },
   });
   var defaultSuplier = !loading
-    ? ProductDetail.singleProduct.suppliers[0].company
+    ? ProductDetail.singleProduct.suppliers[
+        ProductDetail.singleProduct.suppliers.length - 1
+      ].company
     : "Select supplier"; //pedir default suplier
 
   console.log(
     "PRODUCTDETAIL -> ",
-    loading ? "cargando" : ProductDetail.singleProduct.suppliers[0].company
+    loading
+      ? "cargando"
+      : ProductDetail.singleProduct.suppliers[
+          ProductDetail.singleProduct.suppliers.length - 1
+        ].company
   );
-  console.log("USERDATACART: ",userData);
+  console.log("USERDATACART: ", userData);
 
   const [supplier, setSupplier] = useState(defaultSuplier);
   const [amount, setAmount] = useState("1");
-  const [addCartLine,{data:addedCartLine}] = useMutation(addToCart);
+  const [addCartLine, { data: addedCartLine }] = useMutation(addToCart);
 
   useEffect(() => {
     if (!loading) {
-      defaultSuplier = ProductDetail.singleProduct.suppliers[0].company;
+      defaultSuplier =
+        ProductDetail.singleProduct.suppliers[
+          ProductDetail.singleProduct.suppliers.length - 1
+        ].company;
       setSupplier(defaultSuplier);
     }
   }, [loading]);
@@ -62,7 +71,7 @@ export function ProductInfo(props: any) {
     const supplierId = ProductDetail.singleProduct.suppliers.filter(
       (s: any) => s.company == supplier
     )[0].id;
-    console.log("SUPP->",supplierId, supplier);
+    console.log("SUPP->", supplierId, supplier);
     const addedLine = await addCartLine({
       variables: {
         quantity: parseInt(amount),
@@ -172,11 +181,23 @@ export function ProductInfo(props: any) {
                   onChange={onChangeAmount}
                 ></TextField>
               </Stack>
-              <Button variant="contained" style={{ marginTop: 32, width: 200 }} onClick={handleOnAddToCart}>
+              <Button
+                variant="contained"
+                style={{ marginTop: 32, width: 200 }}
+                onClick={handleOnAddToCart}
+              >
                 Add to my cart
               </Button>
-              {addedCartLine && <Typography sx={{color:"green"}}>Successfully added product</Typography>}
-              {errorCart && <Typography sx={{color:"red"}} textAlign="center">{errorCart.message}</Typography>}
+              {addedCartLine && (
+                <Typography sx={{ color: "green" }}>
+                  Successfully added product
+                </Typography>
+              )}
+              {errorCart && (
+                <Typography sx={{ color: "red" }} textAlign="center">
+                  {errorCart.message}
+                </Typography>
+              )}
             </Stack>
           </Stack>
           <Stack direction="column" minWidth="85%" spacing={1}>

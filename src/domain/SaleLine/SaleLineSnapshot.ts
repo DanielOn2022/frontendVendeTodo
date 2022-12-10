@@ -1,5 +1,6 @@
 import { iSnapshot } from "../iSnapshot";
 import { Product } from "../Product/Product";
+import { Supplier } from "../Supplier/Supplier";
 
 export type SaleLineSnapshot = iSnapshot & {
     cart_sale_id: number;
@@ -10,4 +11,5 @@ export type SaleLineSnapshot = iSnapshot & {
     amount: number;
     price?: number | null;
     subTotal?: number | null;
+    supplier?: Supplier | null;
 }

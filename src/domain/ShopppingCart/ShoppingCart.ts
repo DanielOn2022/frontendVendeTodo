@@ -29,9 +29,50 @@ export class ShoppingCart implements iEntity {
   addSaleLine(saleLine: SaleLine): void {
     if (this.saleLines) this.saleLines = [...this.saleLines, saleLine]
     else this.saleLines = [saleLine];
+    this.updateActivity();
   }
 
-  updateActivity(): void {
+  private updateActivity(): void {
     this.lastUpdate = new Date();
   }
+
+  getLines(): SaleLine[] | [] | undefined {
+    this.updateActivity();
+    return this.saleLines;
+  }
+
+  getTotal(availableLines: SaleLine[]) {
+    let total = 0;
+    for (const line of this.saleLines as SaleLine[]) {
+      if (!availableLines.find(saleLine => saleLine.snapshot.supplierId === line.snapshot.supplierId && saleLine.snapshot.product.snapshot.id === line.snapshot.product.snapshot.id))
+        continue;
+      const subTotal = line.getSubTotal();
+      total += subTotal;
+    }
+    this.updateActivity();
+    return total;
+  }
+
+  setSaleLines(saleLines: SaleLine[]): void {
+    this.saleLines = saleLines;
+    this.updateActivity();
+  }
+
+  removeLine(saleLineId: number): boolean {
+    if (!this.saleLines) return false;
+    try {
+      remove(this.saleLines as SaleLine[], saleLine => {
+        return saleLine.snapshot.saleLineId === saleLineId;
+      });
+    } catch (error) {
+      console.log(`Error removing saleline from cart, ${error}`);
+      return false;
+    }
+    this.updateActivity();
+    return true;
+  }
+}
+
+function remove(arg0: SaleLine[], arg1: (saleLine: any) => boolean) {
+  throw new Error("Function not implemented.");
 }

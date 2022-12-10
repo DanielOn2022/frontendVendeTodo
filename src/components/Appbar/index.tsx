@@ -38,9 +38,14 @@ export function Appbar(props: any) {
   const navigateHome = () => {
     navigation?.navigate("Home", { searchedProduct: searchText });
   };
+  const navigateCart = () => {
+    navigation?.navigate("ShoppingCart");
+  };
   const setSearchedText = (e: any) => {
     setsearchText(e.target.value);
   };
+  
+  console.log("BUSCARPROD->",searchText?searchText:"cargando")
 
   const onSearch = () => {
     navigation?.navigate("Home", { searchedProduct: searchText });
@@ -102,7 +107,7 @@ export function Appbar(props: any) {
               <Button variant="text" sx={styles.button} onClick={onLogout}>
                 Logout
               </Button>
-              <Button>
+              <Button onClick={navigateCart}>
                 <ShoppingCart sx={{ color: "white" }} />
               </Button>
             </Stack>
