@@ -97,7 +97,7 @@ export function CartList(props: any) {
         : navigation?.navigate("Checkout", {
             lines: response.data.startPayment.availableLines,
           });
-      console.log("ResponsePayCart->>", response);
+      console.log("🚀 ResponsePayCart->>", response);
     } catch (error) {
       console.log("error->", error);
     }

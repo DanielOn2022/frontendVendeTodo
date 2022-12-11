@@ -5,15 +5,15 @@ import { SaleLineSnapshot } from "./SaleLineSnapshot";
 
 export class SaleLine implements iEntity {
 
-  private cart_sale_id: number;
-  private saleLineId?: number | null;
-  private product: Product;
-  private supplierId: number;
-  private batchId?: number | null;
-  private amount: number;
-  private price?: number | null;
-  private subTotal?: number | null;
-  private supplier?: Supplier | null;
+  cart_sale_id: number;
+  saleLineId?: number | null;
+  product: Product;
+  supplierId: number;
+  batchId?: number | null;
+  amount: number;
+  price?: number | null;
+  subTotal?: number | null;
+  supplier?: Supplier | null;
 
 constructor(data: {
   cart_sale_id: number;
