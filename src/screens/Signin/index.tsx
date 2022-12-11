@@ -59,7 +59,7 @@ export function Signin({navigation}: {navigation: any}) {
           <TextField value={password} id="password" label="Password" type="password" onChange={onChangePassword}/>
           <TextField value={cellphone} id="cellphone" label="Cellphone" onChange={onChangeCellphone}/>
         </Stack>
-        {error && <Typography sx={{color:"red"}} textAlign="center">{error.message}</Typography>}
+        {error && <Typography sx={{color:"red"}} textAlign="center">"Error ocurred at sign in"</Typography>}
         <Button variant="outlined" style={{ width: 100 }} onClick={()=>onSignin(email,name,lastname,password,cellphone)}>
           Sign in
         </Button>
