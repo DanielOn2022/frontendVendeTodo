@@ -1,5 +1,5 @@
 import { NavigationContext } from "@react-navigation/native";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { addToCart, getCart, GetSingleProduct, islogged } from "./queries";
 import {
   Typography,
@@ -17,7 +17,7 @@ import { ShoppingCartFactory } from "../../domain/ShopppingCart/ShoppingCartFact
 import { ShoppingCart } from "../../domain/ShopppingCart/ShoppingCart";
 
 export function ProductInfo(props: any) {
-  const product = props.product;
+  const { product } = props;
   const productSnapshot = product.snapshot;
   const navigation = useContext(NavigationContext);
   
@@ -210,11 +210,12 @@ export function ProductInfo(props: any) {
                   Cantidad:
                 </Typography>
                 <TextField
+                  onChange={onChangeAmount}
+                  defaultValue={1}
+                  InputProps={{ inputProps: { min: 0, max: ProductDetail.singleProduct.stock } }}
                   type="number"
-                  value={amount}
                   size="small"
                   style={{ width: 65 }}
-                  onChange={onChangeAmount}
                 ></TextField>
               </Stack>
               <Button
