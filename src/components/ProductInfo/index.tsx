@@ -12,9 +12,9 @@ import {
 import { useMutation, useQuery } from "@apollo/client";
 import { Product } from "../../domain/Product/Product";
 import { Supplier } from "../../domain/Supplier/Supplier";
-import { any } from "prop-types";
 import { ShoppingCartFactory } from "../../domain/ShopppingCart/ShoppingCartFactory";
 import { ShoppingCart } from "../../domain/ShopppingCart/ShoppingCart";
+import { ProductFactory } from "../../domain/Product/ProductFactory";
 
 export function ProductInfo(props: any) {
   const { product } = props;
@@ -41,29 +41,9 @@ export function ProductInfo(props: any) {
 
   useEffect(() => {
     if (!loading) {
-      const suppliers = ProductDetail.singleProduct.suppliers.map((supplier: any) => {
-        return new Supplier({company: supplier.company, id: supplier.id});
-      });
-      const product = new Product({
-        imageUrl: ProductDetail.singleProduct.imageUrl,
-        name: ProductDetail.singleProduct.name,
-        price: ProductDetail.singleProduct.price,
-        brand: ProductDetail.singleProduct.brand,
-        description: ProductDetail.singleProduct.description,
-        id: ProductDetail.singleProduct.id,
-        stock: ProductDetail.singleProduct.stock,
-        volume: ProductDetail.singleProduct.volume,
-        suppliers
-      });
-      setsingleProduct(product);
+      setsingleProduct(ProductFactory.createFromGraphql(ProductDetail));
     }
   }, [loading])
-
-  useEffect(() => {
-    if (ProductDetail && !loading){
-      
-    }
-  }, [ProductDetail]);
 
   useEffect(() => {
     if(singleProduct) {

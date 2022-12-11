@@ -4,32 +4,48 @@ export const getCart = gql`
   query getCart {
     getCart {
       id
-    lastUpdate
-    cartLines {
-      cart_sale_id
-      saleLineId
-      product {
-        id name brand price stock volume imageUrl description suppliers {
-          id company stock
+      lastUpdate
+      cartLines {
+        cart_sale_id
+        saleLineId
+        product {
+          id
+          name
+          brand
+          price
+          stock
+          volume
+          imageUrl
+          description
+          suppliers {
+            id
+            company
+            stock
+          }
+        }
+        supplierId
+        batchId
+        amount
+        price
+        subTotal
+        supplier {
+          id
+          company
+          stock
         }
       }
-      supplierId
-      batchId
-      amount
-      price
-      subTotal
-      supplier {
-        id company stock
-      }
-    }
-    total
+      total
     }
   }
 `;
 
-
 export const removeLineCart = gql`
-  mutation removeLineCart($id: Int!, $lastUpdate: String!, $saleLineId: Int!, $saleLines: [SaleLineIn]) {
+  mutation removeLineCart(
+    $id: Int!
+    $lastUpdate: String!
+    $saleLineId: Int!
+    $saleLines: [SaleLineIn]
+  ) {
     removeLineCart(
       shoppingCart: { id: $id, lastUpdate: $lastUpdate, saleLines: $saleLines }
       saleLineId: $saleLineId
@@ -40,7 +56,20 @@ export const removeLineCart = gql`
         cart_sale_id
         saleLineId
         product {
-          id name brand price stock volume imageUrl description description suppliers {id company stock}
+          id
+          name
+          brand
+          price
+          stock
+          volume
+          imageUrl
+          description
+          description
+          suppliers {
+            id
+            company
+            stock
+          }
         }
         supplierId
         batchId
@@ -49,6 +78,73 @@ export const removeLineCart = gql`
         subTotal
       }
       total
+    }
+  }
+`;
+
+export const startPayment = gql`
+  mutation startPayment($cart: ShopppingCart!) {
+    startPayment(cart: $cart) {
+      availableLines {
+        cart_sale_id
+        saleLineId
+        product {
+          id
+          name
+          brand
+          price
+          stock
+          volume
+          imageUrl
+          description
+          suppliers {
+            id
+            company
+            stock
+          }
+        }
+        supplierId
+        batchId
+        amount
+        price
+        subTotal
+        supplier {
+          id
+          company
+          stock
+        }
+      }
+      nonAvailableLines {
+        cart_sale_id
+        saleLineId
+        product {
+          id
+          name
+          brand
+          price
+          stock
+          volume
+          imageUrl
+          description
+          suppliers {
+            id
+            company
+            stock
+          }
+        }
+        supplierId
+        batchId
+        amount
+        price
+        subTotal
+        supplier {
+          id
+          company
+          stock
+        }
+      }
+      total
+      shoppingCart
     }
   }
 `;
