@@ -43,7 +43,6 @@ export function CartList(props: any) {
 
   useEffect(() => {
     if (userCart) {
-      console.log("userCart.getCart ------------------ ", userCart.getCart);
       setCart(ShoppingCartFactory.createFromGraphql(userCart.getCart));
     }
   }, [userCart]);

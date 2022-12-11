@@ -5,7 +5,6 @@ import { useContext, useState } from "react";
 
 export function ProductDetail(props: any, navigation: { navigation: any }) {
   const product = props.route.params.product;
-  console.log("PRODUCT->", product);
   const [searchedProduct, setSearchedProduct] = useState("");
   return (
     <Container

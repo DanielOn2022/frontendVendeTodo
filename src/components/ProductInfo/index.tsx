@@ -36,22 +36,14 @@ export function ProductInfo(props: any) {
       name: productSnapshot.name,
       price: productSnapshot.price,
     },
-  });
-
-  // var defaultSuplier = !loading
-  //   ? (singleProduct?.snapshot.suppliers as Supplier[])[(singleProduct?.snapshot.suppliers as Supplier[]).length - 1].snapshot.company
-  //   : "Select supplier"; //pedir default suplier
-
-
+    fetchPolicy:"network-only"
+  }, );
 
   useEffect(() => {
     if (!loading) {
-      console.log('ProductDetail +++++++++++++++++++', ProductDetail)
-      console.log('ProductDetail +++++++++++++++++++', ProductDetail)
       const suppliers = ProductDetail.singleProduct.suppliers.map((supplier: any) => {
         return new Supplier({company: supplier.company, id: supplier.id});
       });
-      console.log('suppliers = = = = = ', suppliers)
       const product = new Product({
         imageUrl: ProductDetail.singleProduct.imageUrl,
         name: ProductDetail.singleProduct.name,
@@ -75,7 +67,7 @@ export function ProductInfo(props: any) {
 
   useEffect(() => {
     if(singleProduct) {
-      console.log('SingleProduc t = = = = = =', singleProduct)
+      console.log('singleProduct en el info => ', singleProduct)
       setSupplier((singleProduct?.snapshot.suppliers as Supplier[])[(singleProduct?.snapshot.suppliers as Supplier[]).length - 1].snapshot.company);
     }
   }, [singleProduct]);
@@ -87,7 +79,6 @@ export function ProductInfo(props: any) {
   }, [userCart]);
 
   const onChangeAmount = (e: any) => {
-    console.log("TARGET->", e.target.value);
     if (e.target.value >= 0) {
       setAmount(e.target.value);
     }
@@ -98,12 +89,9 @@ export function ProductInfo(props: any) {
   };
 
   const handleOnAddToCart = async () => {
-    console.log(cart)
     const supplierId = singleProduct?.snapshot.suppliers?.find(supplierItem => {
-      console.log("supplierItem =>>>>>>>>>> ", supplierItem)
       return supplierItem.snapshot.company === supplier
     });
-    console.log("SUPP->", supplierId, supplier);
     const addedLine = await addCartLine({
       variables: {
         quantity: parseInt(amount),
