@@ -42,6 +42,9 @@ export function CartList(props: any) {
             <LineCard line={line} onRemoveLine={handleOnRemoveCartLine} />
           </Grid>
         ))}
+        {lines?.length>0&&{
+          
+        }}
       </Stack>
     </Container>
   );

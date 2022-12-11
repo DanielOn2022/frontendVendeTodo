@@ -5,21 +5,25 @@ export const getCart = gql`
     getCart {
       id
       lastUpdate
+      total
       cartLines {
         cart_sale_id
+        supplierName
         saleLineId
+        supplierId
+        batchId
         amount
         price
         subTotal
         product {
-          name 
-          imageUrl
+          name
+          price
+          id
         }
       }
     }
   }
 `;
-
 
 export const removeLineCart = gql`
   mutation removeLineCart($id: Int!, $lastUpdate: String!, $saleLineId: Int!) {
