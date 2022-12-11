@@ -10,15 +10,26 @@ import {
   Button,
 } from "@mui/material";
 import { useMutation, useQuery } from "@apollo/client";
+import { Product } from "../../domain/Product/Product";
+import { Supplier } from "../../domain/Supplier/Supplier";
+import { any } from "prop-types";
+import { ShoppingCartFactory } from "../../domain/ShopppingCart/ShoppingCartFactory";
+import { ShoppingCart } from "../../domain/ShopppingCart/ShoppingCart";
 
 export function ProductInfo(props: any) {
   const product = props.product;
   const productSnapshot = product.snapshot;
   const navigation = useContext(NavigationContext);
+  
+  const [supplier, setSupplier] = useState('');
+  const [amount, setAmount] = useState("1");
+  const [singleProduct, setsingleProduct] = useState<Product | null>(null);
+  const [cart, setCart] = useState<ShoppingCart | null>(null);
+  const [addCartLine, { data: addedCartLine }] = useMutation(addToCart);
+  const { data: userCart } = useQuery(getCart);
   const { data: userData } = useQuery(islogged, {
     fetchPolicy: "network-only",
   });
-  const { data: userCart } = useQuery(getCart);
   const { data: ProductDetail, loading, error: errorCart } = useQuery(GetSingleProduct, {
     variables: {
       id: productSnapshot.id,
@@ -26,35 +37,54 @@ export function ProductInfo(props: any) {
       price: productSnapshot.price,
     },
   });
-  var defaultSuplier = !loading
-    ? ProductDetail.singleProduct.suppliers[
-        ProductDetail.singleProduct.suppliers.length - 1
-      ].company
-    : "Select supplier"; //pedir default suplier
 
-  console.log(
-    "PRODUCTDETAIL -> ",
-    loading
-      ? "cargando"
-      : ProductDetail.singleProduct.suppliers[
-          ProductDetail.singleProduct.suppliers.length - 1
-        ].company
-  );
-  console.log("USERDATACART: ", userData);
+  // var defaultSuplier = !loading
+  //   ? (singleProduct?.snapshot.suppliers as Supplier[])[(singleProduct?.snapshot.suppliers as Supplier[]).length - 1].snapshot.company
+  //   : "Select supplier"; //pedir default suplier
 
-  const [supplier, setSupplier] = useState(defaultSuplier);
-  const [amount, setAmount] = useState("1");
-  const [addCartLine, { data: addedCartLine }] = useMutation(addToCart);
+
 
   useEffect(() => {
     if (!loading) {
-      defaultSuplier =
-        ProductDetail.singleProduct.suppliers[
-          ProductDetail.singleProduct.suppliers.length - 1
-        ].company;
-      setSupplier(defaultSuplier);
+      console.log('ProductDetail +++++++++++++++++++', ProductDetail)
+      console.log('ProductDetail +++++++++++++++++++', ProductDetail)
+      const suppliers = ProductDetail.singleProduct.suppliers.map((supplier: any) => {
+        return new Supplier({company: supplier.company, id: supplier.id});
+      });
+      console.log('suppliers = = = = = ', suppliers)
+      const product = new Product({
+        imageUrl: ProductDetail.singleProduct.imageUrl,
+        name: ProductDetail.singleProduct.name,
+        price: ProductDetail.singleProduct.price,
+        brand: ProductDetail.singleProduct.brand,
+        description: ProductDetail.singleProduct.description,
+        id: ProductDetail.singleProduct.id,
+        stock: ProductDetail.singleProduct.stock,
+        volume: ProductDetail.singleProduct.volume,
+        suppliers
+      });
+      setsingleProduct(product);
     }
   }, [loading])
+
+  useEffect(() => {
+    if (ProductDetail && !loading){
+      
+    }
+  }, [ProductDetail]);
+
+  useEffect(() => {
+    if(singleProduct) {
+      console.log('SingleProduc t = = = = = =', singleProduct)
+      setSupplier((singleProduct?.snapshot.suppliers as Supplier[])[(singleProduct?.snapshot.suppliers as Supplier[]).length - 1].snapshot.company);
+    }
+  }, [singleProduct]);
+
+  useEffect(() => {
+    if(userCart) {
+      setCart(ShoppingCartFactory.createFromGraphql(userCart.getCart));
+    }
+  }, [userCart]);
 
   const onChangeAmount = (e: any) => {
     console.log("TARGET->", e.target.value);
@@ -68,19 +98,25 @@ export function ProductInfo(props: any) {
   };
 
   const handleOnAddToCart = async () => {
-    const supplierId = ProductDetail.singleProduct.suppliers.filter(
-      (s: any) => s.company == supplier
-    )[0].id;
+    console.log(cart)
+    const supplierId = singleProduct?.snapshot.suppliers?.find(supplierItem => {
+      console.log("supplierItem =>>>>>>>>>> ", supplierItem)
+      return supplierItem.snapshot.company === supplier
+    });
     console.log("SUPP->", supplierId, supplier);
     const addedLine = await addCartLine({
       variables: {
         quantity: parseInt(amount),
-        supplierId: parseInt(supplierId),
-        productId: ProductDetail.singleProduct.id,
-        price: ProductDetail.singleProduct.price,
-        name: ProductDetail.singleProduct.name,
-        cartId: userCart.getCart.id,
-        lastUpdate: userCart.getCart.lastUpdate,
+        supplierId: supplierId?.snapshot.id,
+        product: {...singleProduct?.snapshot, suppliers: singleProduct?.snapshot.suppliers?.map(supplier => {return {...supplier.snapshot}})},
+        cart: {...cart?.snapshot, saleLines: cart?.snapshot.saleLines?.map(saleLine => {return {
+          ...saleLine.snapshot,
+          product: {
+            ...saleLine.snapshot.product.snapshot,
+            suppliers: undefined,
+          },
+          supplier: { ...saleLine.snapshot.supplier?.snapshot },
+        };})},
       },
     });
   };

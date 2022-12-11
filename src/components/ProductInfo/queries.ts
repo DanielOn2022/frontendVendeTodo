@@ -3,18 +3,9 @@ import { gql } from "@apollo/client";
 export const GetSingleProduct = gql`
   query singleProduct($id: Int!, $name: String!, $price: Float!) {
     singleProduct(product: { id: $id, name: $name, price: $price }) {
-      id
-      name
-      brand
-      price
-      stock
-      volume
-      imageUrl
-      description
-      suppliers {
-        id
-        company
-      }
+      id name brand price stock volume imageUrl description suppliers {
+      id company 
+    }
     }
   }
 `;
@@ -37,17 +28,14 @@ export const addToCart = gql`
   mutation addToCart(
     $quantity: Int!
     $supplierId: Int!
-    $productId: Int!
-    $price: Float!
-    $name: String!
-    $cartId: Int!
-    $lastUpdate: String!
+    $product: Product!
+    $cart: ShopppingCart!
   ) {
     addToCart(
       quantity: $quantity
       supplierId: $supplierId
-      product: { id: $productId, price: $price, name: $name }
-      cart: { id: $cartId, lastUpdate: $lastUpdate }
+      product: $product
+      cart: $cart
     ) {
       id
       cartLines {
@@ -62,7 +50,25 @@ export const getCart = gql`
   query getCart {
     getCart {
       id
-      lastUpdate
+    lastUpdate
+    cartLines {
+      cart_sale_id
+      saleLineId
+      product {
+        id name brand price stock volume imageUrl description suppliers {
+          id company stock
+        }
+      }
+      supplierId
+      batchId
+      amount
+      price
+      subTotal
+      supplier {
+        id company stock
+      }
+    }
+    total
     }
   }
 `;
