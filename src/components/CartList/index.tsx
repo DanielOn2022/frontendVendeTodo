@@ -27,6 +27,7 @@ export function CartList(props: any) {
   };
   return (
     <Container maxWidth="xl">
+      {lines.length==0&&(<Typography variant="h4" textAlign="center">Tu carrito está vacío</Typography>)}
       <Stack spacing={4}>
         {lines.length == 0 && !loading && (
           <Stack>
