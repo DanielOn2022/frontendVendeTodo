@@ -148,6 +148,7 @@ export function ProductInfo(props: any) {
                 </Typography>
                 <Autocomplete
                   disablePortal
+                  disableClearable
                   id="provedor"
                   options={ProductDetail.singleProduct.suppliers.map(
                     (suplier: any) => {

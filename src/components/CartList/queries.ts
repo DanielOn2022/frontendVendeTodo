@@ -151,3 +151,9 @@ export const startPayment = gql`
     }
   }
 `;
+
+export const cancelStartPayment = gql`
+  mutation cancelStartPayment($availableLines:[SaleLineIn!]!){
+  cancelStartPayment(availableLines:$availableLines)
+  }
+`;

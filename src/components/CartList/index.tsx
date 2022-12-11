@@ -1,25 +1,64 @@
 import { useMutation, useQuery } from "@apollo/client";
-import { Button, Container, Grid, Stack, Typography } from "@mui/material";
+import {
+  Button,
+  Container,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
+  Grid,
+  Stack,
+  Typography,
+} from "@mui/material";
 import { NavigationContext } from "@react-navigation/native";
 import { useContext, useEffect, useState } from "react";
 import { LineCard } from "../LineCard";
-import { getCart, removeLineCart, startPayment } from "./queries";
+import {
+  cancelStartPayment,
+  getCart,
+  removeLineCart,
+  startPayment,
+} from "./queries";
 import emptycart from "../../assets/emptycart.png";
 import { ShoppingCart } from "../../domain/ShopppingCart/ShoppingCart";
 import { SaleLine } from "../../domain/SaleLine/SaleLine";
 import { ShoppingCartFactory } from "../../domain/ShopppingCart/ShoppingCartFactory";
+import { SaleLineFactory } from "../../domain/SaleLine/SaleLineFactory";
 
 export function CartList(props: any) {
   const [cart, setCart] = useState<ShoppingCart | null>(null);
+  const [open, setOpen] = useState(false);
 
   const { data: userCart, error: errorCart, loading } = useQuery(getCart);
   const [removeCartLine] = useMutation(removeLineCart);
-  const [payCart] = useMutation(startPayment);
+  const [payCart, { data: paymentData }] = useMutation(startPayment);
+  const [cancelPayCart] = useMutation(cancelStartPayment);
   const navigation = useContext(NavigationContext);
 
-  const handleOnRemoveCartLine = (lineId: number) => {
+  const handleKeepBuying = () => {
+    navigation?.navigate("Checkout", {
+      lines: paymentData?.startPayment.availableLines,
+    });
+  };
+
+  const handleDiscardPayment = async () => {
+    console.log("DATA PAYMENTINTENT->", paymentData);
+    const lines = SaleLineFactory.createManyFromGraphql(
+      paymentData?.startPayment.availableLines
+    );
+    console.log("DOM LINES->", lines);
+    await cancelPayCart({
+      variables: {
+        availableLines: SaleLineFactory.createManyForGraphql(lines),
+      },
+    });
+    setOpen(false);
+  };
+
+  const handleOnRemoveCartLine = async (lineId: number) => {
     try {
-      removeCartLine({
+      await removeCartLine({
         variables: {
           id: userCart.getCart.id,
           lastUpdate: userCart.getCart.lastUpdate,
@@ -40,18 +79,24 @@ export function CartList(props: any) {
     } catch (e) {}
   };
 
-  const handleOnProceedToPayment = async () => {
+  const handleOnCheckout = async () => {
     console.log("payment->");
     try {
       console.log("cart->", cart);
-      const graphqlCart = ShoppingCartFactory.createForGrapqhl(cart as ShoppingCart);
+      const graphqlCart = ShoppingCartFactory.createForGrapqhl(
+        cart as ShoppingCart
+      );
       console.log("params->", graphqlCart);
       const response = await payCart({
         variables: {
           cart: graphqlCart,
         },
       });
-
+      response.data?.startPayment.nonAvailableLines.length
+        ? setOpen(true)
+        : navigation?.navigate("Checkout", {
+            lines: response.data.startPayment.availableLines,
+          });
       console.log("ResponsePayCart->>", response);
     } catch (error) {
       console.log("error->", error);
@@ -64,15 +109,11 @@ export function CartList(props: any) {
     }
   }, [userCart]);
 
+  console.log("CART", cart);
   return (
     <Container maxWidth="xl">
-      {cart?.snapshot.saleLines?.length == 0 && (
-        <Typography variant="h4" textAlign="center">
-          Tu carrito está vacío
-        </Typography>
-      )}
       <Stack spacing={4}>
-        {!loading && cart && (
+        {!loading && cart?.getLines()?.length ? (
           <Container>
             <Stack
               paddingBottom={8}
@@ -92,13 +133,12 @@ export function CartList(props: any) {
                   ${cart.getTotal(cart.getLines() as SaleLine[]).toFixed(2)}
                 </Typography>
               </Stack>
-              <Button variant="contained" onClick={handleOnProceedToPayment}>
+              <Button variant="contained" onClick={handleOnCheckout}>
                 Proceed to payment
               </Button>
             </Stack>
           </Container>
-        )}
-        {cart?.snapshot.saleLines?.length == 0 && !loading && (
+        ) : (
           <Stack>
             <Typography variant="h4" textAlign="center">
               Sorry, your cart is empty
@@ -112,6 +152,28 @@ export function CartList(props: any) {
           </Grid>
         ))}
       </Stack>
+      <Dialog
+        open={open}
+        onClose={() => setOpen(false)}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          Couldn't complete your order
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            One or more products do not have the enough existence to fulfill
+            your order. Keep buying the rest of the products?
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleDiscardPayment}>Cancel</Button>
+          <Button onClick={handleKeepBuying} autoFocus>
+            Keep buying
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   );
 }
