@@ -1,5 +1,5 @@
 import { NavigationContext } from "@react-navigation/native";
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { addToCart, getCart, GetSingleProduct, islogged } from "./queries";
 import {
   Typography,
@@ -12,7 +12,7 @@ import {
 import { useMutation, useQuery } from "@apollo/client";
 
 export function ProductInfo(props: any) {
-  const product = props.product;
+  const { product } = props;
   const productSnapshot = product.snapshot;
   const navigation = useContext(NavigationContext);
   const { data: userData } = useQuery(islogged, {
@@ -43,7 +43,7 @@ export function ProductInfo(props: any) {
   console.log("USERDATACART: ", userData);
 
   const [supplier, setSupplier] = useState(defaultSuplier);
-  const [amount, setAmount] = useState("1");
+  const amount = useRef<HTMLInputElement>();
   const [addCartLine, { data: addedCartLine }] = useMutation(addToCart);
 
   useEffect(() => {
@@ -56,12 +56,12 @@ export function ProductInfo(props: any) {
     }
   }, [loading])
 
-  const onChangeAmount = (e: any) => {
-    console.log("TARGET->", e.target.value);
-    if (e.target.value >= 0) {
-      setAmount(e.target.value);
-    }
-  };
+  // const onChangeAmount = (e: any) => {
+  //   console.log("TARGET->", e.target.value);
+  //   if (e.target.value >= 0) {
+  //     setAmount(e.target.value);
+  //   }
+  // };
 
   const onChangeSupplier = (e: any, newValue: any) => {
     setSupplier(newValue);
@@ -74,7 +74,7 @@ export function ProductInfo(props: any) {
     console.log("SUPP->", supplierId, supplier);
     const addedLine = await addCartLine({
       variables: {
-        quantity: parseInt(amount),
+        quantity: amount?.current?.value,
         supplierId: parseInt(supplierId),
         productId: ProductDetail.singleProduct.id,
         price: ProductDetail.singleProduct.price,
@@ -174,11 +174,12 @@ export function ProductInfo(props: any) {
                   Cantidad:
                 </Typography>
                 <TextField
+                  inputRef={amount}
+                  defaultValue={1}
+                  InputProps={{ inputProps: { min: 0, max: ProductDetail.singleProduct.stock } }}
                   type="number"
-                  value={amount}
                   size="small"
                   style={{ width: 65 }}
-                  onChange={onChangeAmount}
                 ></TextField>
               </Stack>
               <Button
