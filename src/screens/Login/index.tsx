@@ -73,7 +73,7 @@ export function Login(props: any) {
               value={password}
               onChange={onChangePassword}
             />
-            {error && <Typography sx={{color:"red"}} textAlign="center">{error.message}</Typography>}
+            {error && <Typography sx={{color:"red"}} textAlign="center">"Error ocurred at log in"</Typography>}
           </Stack>
           <Button
             variant="outlined"
