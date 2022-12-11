@@ -25,7 +25,6 @@ export function Login(props: any) {
     try {
       const loggedUser = await loginUser({ variables: { email, password } });
       localStorage.setItem("token", loggedUser.data.login.token);
-      console.log("USER==", loggedUser);
       if (loginType == "client") {
         navigation.navigate("Home", { searchedProduct: "" });
       } else {

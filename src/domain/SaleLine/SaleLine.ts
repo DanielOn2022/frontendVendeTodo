@@ -24,6 +24,7 @@ constructor(data: {
   amount: number;
   price?: number | null;
   subTotal?: number | null;
+  supplier?: Supplier | null;
 }) {
   this.cart_sale_id = data.cart_sale_id;
   this.saleLineId = data.saleLineId;
@@ -33,6 +34,7 @@ constructor(data: {
   this.amount = data.amount;
   this.price = data.price || this.product.snapshot.price;
   this.subTotal = data.subTotal || (this.price as unknown as number * this.amount) as unknown as number;
+  this.supplier = data.supplier;
 }
 
 get snapshot(): SaleLineSnapshot {
@@ -44,7 +46,8 @@ get snapshot(): SaleLineSnapshot {
     batchId: this.batchId,
     amount: this.amount,
     price: this.price,
-    subTotal: this.subTotal
+    subTotal: this.subTotal,
+    supplier: this.supplier
   };
 }
 

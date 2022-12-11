@@ -15,7 +15,6 @@ import { Container } from "@mui/system";
 
 export function ProductCard(props: any) {
   const product = props.product;
-  console.log("PRODCARD:", product)
   const productSnapshot = product.snapshot;
   const navigation = useContext(NavigationContext);
 

@@ -12,7 +12,6 @@ export function ProductList (props:any) {
   
   const { data: allProductsData, loading } = useQuery(GetProductsByName,{variables:{name:searchedProduct}});
 
-  console.log(allProductsData);
   if (allProductsData) {
     products = allProductsData.getProductsByName.map(
       (fetchedProduct: any) => new Product({ ...fetchedProduct })

@@ -13,7 +13,7 @@ export function LineCard(props: any) {
           src={line.product.imageUrl}
           style={{ minWidth: "20%", maxWidth: "20%" }}
         />
-        <Stack direction="column" spacing={2}>
+        <Stack direction="column" spacing={2} minWidth="40%">
           <Typography variant="h4">{line.product.name}</Typography>
           <Stack direction="column" spacing={0.5}>
             <Typography variant="h6">Amount: {line.amount}</Typography>

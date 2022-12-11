@@ -13,14 +13,10 @@ import { islogged } from "./queries";
 
 export function Appbar(props: any) {
   const navigation = useContext(NavigationContext);
-  console.log("PROD ->", props.searchedProduct);
   const [searchText, setsearchText] = useState(props.searchedProduct);
   const { data: userData, error } = useQuery(islogged, {fetchPolicy:"network-only"});
 
-  console.log("DATA ->", userData, "ERROR -> ", error);
-
   useEffect(() => {
-    console.log("UPDATED ->", userData);
     if (userData) {
       localStorage.setItem("token", userData.logedIn.token);
     }
@@ -45,7 +41,6 @@ export function Appbar(props: any) {
     setsearchText(e.target.value);
   };
   
-  console.log("BUSCARPROD->",searchText?searchText:"cargando")
 
   const onSearch = () => {
     navigation?.navigate("Home", { searchedProduct: searchText });
@@ -57,7 +52,6 @@ export function Appbar(props: any) {
     window.location.reload();
   };
 
-  console.log("SEARCHTEXT -> ", searchText);
   return (
     <AppBar color="primary" position="fixed">
       <Container maxWidth="xl">
