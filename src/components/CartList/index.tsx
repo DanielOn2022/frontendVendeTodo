@@ -43,17 +43,12 @@ export function CartList(props: any) {
   const handleOnProceedToPayment = async () => {
     console.log("payment->");
     try {
-      console.log("cart->", userCart.getCart);
-      
-      const cart = {
-        id: userCart.getCart.id,
-        lastUpdate: userCart.getCart.lastUpdate,
-        saleLines: userCart.getCart.cartLines,
-      };
-      console.log("params->", cart);
+      console.log("cart->", cart);
+      const graphqlCart = ShoppingCartFactory.createForGrapqhl(cart as ShoppingCart);
+      console.log("params->", graphqlCart);
       const response = await payCart({
         variables: {
-          cart,
+          cart: graphqlCart,
         },
       });
 

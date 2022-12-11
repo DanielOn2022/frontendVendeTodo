@@ -144,7 +144,10 @@ export const startPayment = gql`
         }
       }
       total
-      shoppingCart
+      shoppingCart {
+        id lastUpdate cartLines {cart_sale_id saleLineId product {id name brand price volume imageUrl description suppliers {id company}}
+        supplierId batchId amount price supplier {id company}} total
+      }
     }
   }
 `;

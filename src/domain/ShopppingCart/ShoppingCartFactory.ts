@@ -37,4 +37,15 @@ export class ShoppingCartFactory {
     });
     return cart;
   }
+
+  static createForGrapqhl(cart: ShoppingCart) {
+    return {...cart?.snapshot, saleLines: cart?.snapshot.saleLines?.map(saleLine => {return {
+      ...saleLine.snapshot,
+      product: {
+        ...saleLine.snapshot.product.snapshot,
+        suppliers: undefined,
+      },
+      supplier: { ...saleLine.snapshot.supplier?.snapshot },
+    };})}
+  }
 }
