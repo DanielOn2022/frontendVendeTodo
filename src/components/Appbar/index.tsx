@@ -6,7 +6,7 @@ import { NavigationContext } from "@react-navigation/native";
 import logo from "../../assets/logo.png";
 import { styles } from "./styles";
 import { ShoppingCart } from "@mui/icons-material";
-import { Container } from "@mui/system";
+import { Container, margin } from "@mui/system";
 import { useState } from "react";
 import { useQuery } from "@apollo/client";
 import { islogged } from "./queries";
@@ -14,7 +14,9 @@ import { islogged } from "./queries";
 export function Appbar(props: any) {
   const navigation = useContext(NavigationContext);
   const [searchText, setsearchText] = useState(props.searchedProduct);
-  const { data: userData, error } = useQuery(islogged, {fetchPolicy:"network-only"});
+  const { data: userData, error } = useQuery(islogged, {
+    fetchPolicy: "network-only",
+  });
 
   useEffect(() => {
     if (userData) {
@@ -40,18 +42,17 @@ export function Appbar(props: any) {
   const setSearchedText = (e: any) => {
     setsearchText(e.target.value);
   };
-  
 
   const onSearch = () => {
     navigation?.navigate("Home", { searchedProduct: searchText });
   };
 
   const onLogout = () => {
-    localStorage.removeItem("token");
+    localStorage.clear();
     navigation?.navigate("Home", { searchedProduct: "" });
     window.location.reload();
   };
-
+  //console.log("ROLITO EN TOPBAR ->->->", localStorage.getItem("role"))
   return (
     <AppBar color="primary" position="fixed">
       <Container maxWidth="xl">
@@ -78,18 +79,21 @@ export function Appbar(props: any) {
               Employees
             </Button>
           </Stack>
-          <Stack direction="row" justifyContent="center" alignItems="center">
-            <SearchContainer
-              id={searchText}
-              onChange={setSearchedText}
-              placeholder="Search..."
-            >
-              <InputBaseContainer placeholder="Search…" />
-            </SearchContainer>
-            <Button onClick={onSearch}>
-              <SearchIcon style={{ color: "#fff" }} />
-            </Button>
-          </Stack>
+          {!localStorage.getItem("role") && (
+            <Stack direction="row" justifyContent="center" alignItems="center">
+              <SearchContainer
+                id={searchText}
+                onChange={setSearchedText}
+                placeholder="Search..."
+                style={{ maxWidth:"65%", margin:0}}
+              >
+                <InputBaseContainer placeholder="Search…" />
+              </SearchContainer>
+              <Button onClick={onSearch}>
+                <SearchIcon style={{ color: "#fff" }} />
+              </Button>
+            </Stack>
+          )}
           {userData ? (
             <Stack
               direction="row"
@@ -97,13 +101,15 @@ export function Appbar(props: any) {
               alignItems="center"
               spacing={2}
             >
-              <Typography>{localStorage.getItem("name")}</Typography>
+              <Typography minWidth="50%">{localStorage.getItem("name")}</Typography>
               <Button variant="text" sx={styles.button} onClick={onLogout}>
                 Logout
               </Button>
-              <Button onClick={navigateCart}>
-                <ShoppingCart sx={{ color: "white" }} />
-              </Button>
+              {!localStorage.getItem("role") && (
+                <Button onClick={navigateCart}>
+                  <ShoppingCart sx={{ color: "white" }} />
+                </Button>
+              )}
             </Stack>
           ) : (
             <Stack

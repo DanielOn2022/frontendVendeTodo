@@ -29,7 +29,10 @@ export function Login(props: any) {
     const loggedUser = await clientLogin({ variables: { email, password } });
     if (!loggedUser) return;
     localStorage.setItem("token", loggedUser.data.login.token);
-    navigation?.navigate("Home", { searchedProduct: "" });
+    localStorage.setItem("name", loggedUser.data.login.name);
+    console.log("client logedin",loggedUser)
+    console.log("navigated")
+    window.location.reload();
   };
 
   const onLoginEmployee = async (email: String, password: String) => {
@@ -39,16 +42,11 @@ export function Login(props: any) {
     if (!loggedUser) return;
     localStorage.setItem("token", loggedUser.data.loginEmployee.token);
     localStorage.setItem("name", loggedUser.data.loginEmployee.name);
-    const role = loggedUser.data.loginEmployee.role;
-    if (role == "suplier") {
-      navigation?.navigate("Supplier");
-    }
-    if (role == "warehouse_manager") {
-      navigation?.navigate("WarehouseManager");
-    }
-    if (role == "shelf_manager") {
-      navigation?.navigate("ShelfManager");
-    }
+    localStorage.setItem("role", loggedUser.data.loginEmployee.role);
+    localStorage.setItem("cellphone", loggedUser.data.loginEmployee.cellphone);
+    localStorage.setItem("rfc", loggedUser.data.loginEmployee.rfc);
+    localStorage.setItem("email", loggedUser.data.loginEmployee.email);
+    window.location.reload();
   };
 
   const onChangeEmail = (e: ChangeEvent<HTMLTextAreaElement>) => {
