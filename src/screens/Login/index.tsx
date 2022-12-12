@@ -2,38 +2,51 @@ import { ArrowBack } from "@mui/icons-material";
 import { Container, Button, Typography, Stack, TextField } from "@mui/material";
 import logo from "../../assets/logo.png";
 import { styles } from "./styles";
-import { login } from "./queries";
+import { login, loginEmployee } from "./queries";
 import { useMutation } from "@apollo/client";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useContext, useState } from "react";
+import { NavigationContext } from "@react-navigation/core";
 
 export function Login(props: any) {
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [loginUser, { data, loading, error }] = useMutation(login);
-  const { navigation } = props;
+  const [clientLogin, { data: client, error: clientError }] =
+    useMutation(login);
+  const [employeeLogin, { data: employee, error: employeeError }] =
+    useMutation(loginEmployee);
+  const navigation = useContext(NavigationContext);
   const { loginType } = props.route.params;
 
   const navigateSignin = () => {
-    navigation.navigate("Signin");
+    navigation?.navigate("Signin");
   };
 
   const goBack = () => {
-    navigation.goBack();
+    navigation?.goBack();
   };
 
-  const onLogin = async (email: String, password: String) => {
-    try {
-      const loggedUser = await loginUser({ variables: { email, password } });
-      localStorage.setItem("token", loggedUser.data.login.token);
-      if (loginType == "client") {
-        navigation.navigate("Home", { searchedProduct: "" });
-      } else {
-        navigation.navigate("Suplier");
-      }
-      window.location.reload();
-    } catch (e) {
-      console.log("e: ", e);
-      if (error) console.log("error: ", error);
+  const onLoginClient = async (email: String, password: String) => {
+    const loggedUser = await clientLogin({ variables: { email, password } });
+    if (!loggedUser) return;
+    localStorage.setItem("token", loggedUser.data.login.token);
+    navigation?.navigate("Home", { searchedProduct: "" });
+  };
+
+  const onLoginEmployee = async (email: String, password: String) => {
+    const loggedUser = await employeeLogin({
+      variables: { email, password },
+    });
+    if (!loggedUser) return;
+    localStorage.setItem("token", loggedUser.data.loginEmployee.token);
+    const role = loggedUser.data.loginEmployee.role;
+    if (role == "suplier") {
+      navigation?.navigate("Supplier");
+    }
+    if (role == "warehouse_manager") {
+      navigation?.navigate("WarehouseManager");
+    }
+    if (role == "shelf_manager") {
+      navigation?.navigate("ShelfManager");
     }
   };
 
@@ -72,12 +85,24 @@ export function Login(props: any) {
               value={password}
               onChange={onChangePassword}
             />
-            {error && <Typography sx={{color:"red"}} textAlign="center">"Error ocurred at log in"</Typography>}
+            <Container>
+              {clientError || employeeError ? (
+                <Typography sx={{ color: "red" }} textAlign="center">
+                  Error ocurred at log in{" "}
+                </Typography>
+              ) : (
+                <p></p>
+              )}
+            </Container>
           </Stack>
           <Button
             variant="outlined"
             style={{ width: 100 }}
-            onClick={() => onLogin(email, password)}
+            onClick={() => {
+              loginType == "client"
+                ? onLoginClient(email, password)
+                : onLoginEmployee(email, password);
+            }}
           >
             Log in
           </Button>

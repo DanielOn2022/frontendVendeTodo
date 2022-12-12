@@ -38,7 +38,7 @@ export const login = gql`
   }
 `;
 
-export const loginEmpleado = gql`
+export const loginEmployee = gql`
   mutation loginemployee {
     loginEmployee(email: "waldo@hotmail.com", password: "waldo123") {
       id

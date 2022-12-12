@@ -9,9 +9,11 @@ import { Home } from "../Home";
 import { Login } from "../Login";
 import { Signin } from "../Signin";
 import { ProductDetail } from "../ProductDetail";
-import { Suplier } from "../suplier";
+import { Supplier } from "../Supplier";
 import { ShoppingCart } from "../ShoppingCart";
 import { StartPayment } from "../StartPayment";
+import { WarehouseManager } from "../WarehouseManager";
+import { ShelfManager } from "../ShelfManager";
 
 function App() {
   useEffect(() => {
@@ -27,15 +29,27 @@ function App() {
           <Stack.Navigator initialRouteName="Home">
             <Stack.Screen name="Signin" component={Signin} />
             <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Home" component={Home} initialParams={{ searchedProduct:"" }} />
-            <Stack.Screen name="Suplier" component={Suplier} />
-            <Stack.Screen name="ShoppingCart" component={ShoppingCart}></Stack.Screen>
+            <Stack.Screen
+              name="Home"
+              component={Home}
+              initialParams={{ searchedProduct: "" }}
+            />
+            <Stack.Screen name="Suplier" component={Supplier} />
+            <Stack.Screen
+              name="WarehouseManager"
+              component={WarehouseManager}
+            />
+            <Stack.Screen name="ShelfManager" component={ShelfManager} />
+            <Stack.Screen
+              name="ShoppingCart"
+              component={ShoppingCart}
+            ></Stack.Screen>
+            <Stack.Screen name="Checkout" component={StartPayment} />
             <Stack.Screen
               name="ProductDetail"
               component={ProductDetail}
-              initialParams={{ product: undefined}}
+              initialParams={{ product: undefined }}
             />
-            <Stack.Screen name="Checkout" component={StartPayment}/>
           </Stack.Navigator>
         </NavigationContainer>
       </ThemeProvider>
