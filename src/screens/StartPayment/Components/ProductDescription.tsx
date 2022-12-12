@@ -8,13 +8,7 @@ interface Props {
 const ProductDescription = (props: Props) => {
   const {line} = props;
   return (
-    <Container>
-      <Stack
-        direction="row"
-        spacing={7}
-        alignItems="center"
-        justifyContent="center"
-        >
+    <Container sx={{display: "flex", justifyContent: "flex-start", gap: "16px", borderBottom: "2px solid gray", paddingBottom: "16px", marginTop: "16px"}}>
         <img
           src={line.product.imageUrl}
           style={{ minWidth: "20%", maxWidth: "20%" }}
@@ -29,8 +23,6 @@ const ProductDescription = (props: Props) => {
             </Typography>
           </Stack>
         </Stack>
-      </Stack>
-      <Divider sx={{ marginY: 4 }} />
     </Container>
   )
 }

@@ -23,7 +23,7 @@ export const ListShippingAddress = (props: any) => {
   }
   if (loading) return <CircularProgress />
   return (
-    <Container sx={{display: 'flex', gap: "8px", flexDirection: "column"}}>
+    <Container sx={{display: 'flex', gap: "16px", flexDirection: "column"}}>
       <Typography>Select your shipping address</Typography>
       {shippingAddress.map((address: any) => <ShippingAddress {...address} selectedAddress={selectedAddress} handleOnClickSelect={handleOnClickSelect} ></ShippingAddress>)}
     </Container>

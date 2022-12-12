@@ -1,59 +1,49 @@
-import { useMutation, useQuery } from "@apollo/client";
+import { useMutation } from "@apollo/client";
 import {
   Alert,
-  AppBar,
   Button,
-  CircularProgress,
   Container,
-  FormControl,
   Grid,
-  TextField,
   Typography,
 } from "@mui/material";
 import { NavigationContext } from "@react-navigation/native";
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useState } from "react";
 import { Appbar } from "../../components/Appbar";
-import { LineCard } from "../../components/LineCard";
-import { SaleLine } from "../../domain/SaleLine/SaleLine";
 import { SaleLineFactory } from "../../domain/SaleLine/SaleLineFactory";
 import { ListPaymentMethods } from "./Components/ListPaymentMethods";
 import { ListShippingAddress } from "./Components/ListShippingAddress";
-import PaymentMethod from "./Components/PaymentMethod";
 import ProductDescription from "./Components/ProductDescription";
-import ShippingAddress from "./Components/ShippingAddress";
 import {
+  authorizePayment,
   cancelStartPayment,
-  getPaymentMethod,
-  getShippingAddress,
 } from "./queries";
 
 export function StartPayment(props: any) {
-  const { lines, total, userId } = props.route.params;
+  const { lines, total } = props.route.params;
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [error, setError] = useState(false);
   const [errorDescription, setErrorDescription] = useState("");
-  const [disable, setDisable] = useState(false);
   const navigation = useContext(NavigationContext);
 
+
   const [mutationCancel] = useMutation(cancelStartPayment);
+  const [mutationPay] = useMutation(authorizePayment);
 
-  useEffect(() => {
-    console.log(
-      "🚀 ~ file: index.tsx:20 ~ StartPayment ~ selectedPayment",
-      selectedPayment
-    );
-  }, [selectedPayment]);
-
-  useEffect(() => {
-    console.log(
-      "🚀 ~ file: index.tsx:25 ~ StartPayment ~ selectedAddress",
-      selectedAddress
-    );
-  }, [selectedAddress]);
-
-  const handleOnClickPay = () => {
+  const handleOnClickPay = async () => {
     if (!selectedAddress || !selectedPayment) {
+      setError(true);
+      setErrorDescription("You have to select the address and the payment");
+      return;
+    }
+    try {
+      const response = await mutationPay({
+        variables: lines,
+      });
+    } catch (error: any) {
+      setError(true);
+      const description: string = error?.message || error?.description || "Unexpected error, try to reload the page.";
+      setErrorDescription(description);
     }
   };
   const handleOnClickCancel = async () => {
@@ -64,16 +54,17 @@ export function StartPayment(props: any) {
           availableLines: SaleLineFactory.createManyForGraphql(graphqlLines),
         },
       });
-      console.log(
-        "🚀 ~ file: index.tsx:43 ~ handleOnClickCancel ~ response",
-        response
-      );
+      console.log("🚀 ~ file: index.tsx:43 ~ handleOnClickCancel ~ response",response);
     } catch (e) {
       console.log(e);
     } finally {
       //navigation?.navigate("Home");
     }
   };
+  const handleOnCloseError = () => {
+    setError(false);
+    setErrorDescription('');
+  }
   return (
     <Container
       maxWidth={false}
@@ -82,7 +73,8 @@ export function StartPayment(props: any) {
     >
       <Appbar searchedProduct={""} />
       <Grid container spacing={2}>
-        <Grid item xs={6} sx={{ border: "1px solid red", padding: 8 }}>
+        <Grid item xs={6} sx={{ display: "flex", flexDirection: "column", alignItems: "center",  gap: "8px",  padding: "64px" }}>
+        <Typography>List of products</Typography>
           {lines.map((line: any) => (
             <ProductDescription line={line}></ProductDescription>
           ))}
@@ -106,11 +98,11 @@ export function StartPayment(props: any) {
             setSelectedAddress={setSelectedAddress}
             selectedAddress={selectedAddress}
           ></ListShippingAddress>
-          <Alert severity="error" onClose={() => {}}>
-            This is a success alert — check it out!
-          </Alert>
+          {error && <Alert severity="error" onClose={handleOnCloseError}>
+            {errorDescription}
+          </Alert>}
           <Container sx={{ display: "flex", justifyContent: "space-around" }}>
-            <Button variant="outlined" onClick={handleOnClickPay}>
+            <Button variant="contained" onClick={handleOnClickPay}>
               Pay
             </Button>
             <Button onClick={handleOnClickCancel} variant="outlined">

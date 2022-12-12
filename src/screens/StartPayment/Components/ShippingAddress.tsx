@@ -7,16 +7,17 @@ const ShippingAddress = (props: any) => {
   const handleOnClick = () => {
     handleOnClickSelect(id);
   }
-  console.log("🚀 ~ file: ShippingAddress.tsx:12 ~ ShippingAddress ~ selectedAddress", typeof selectedAddress);
   
   const background = id === selectedAddress ? "#AAA" : "#fff";
   return (
     <Container sx={{
-        border: "2px solid red",
         gap: "8px",
         display: "flex",
         flexDirection: "row",
         backgroundColor: background,
+        paddingY: "8px",
+        alignItems: "center",
+        boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
     }}>
       <Container sx={{
         display: "flex",
@@ -33,14 +34,15 @@ const ShippingAddress = (props: any) => {
         flexDirection: "column",
         gap: "4px"
       }}>
-        <Typography>{city}</Typography>
-        <Typography>{street}</Typography>
-        <Typography>{externalNumber}</Typography>
-        <Typography>{internalNumber}</Typography>
+        <Typography>{city || "-"}</Typography>
+        <Typography>{street || "-"}</Typography>
+        <Typography>{externalNumber || "-"}</Typography>
+        <Typography>{internalNumber || "-"}</Typography>
       </Container>
         <Button 
         variant="outlined"
         onClick={handleOnClick}
+        sx={{padding: "8px"}}
         >
             Select
         </Button>

@@ -44,7 +44,7 @@ export const cancelStartPayment = gql`
   }
 `;
 
-export const authoriza = gql`
+export const authorizePayment = gql`
 mutation authorizePayment {
   authorizePayment(
     paymentMethod: { cardNumber: 4466, clientId: 8 }

@@ -15,11 +15,12 @@ const PaymentMethod = (props: Props) => {
   const background = lastDigits === selectedPayment ? "#AAA" : "#fff";
   return (
     <Container sx={{
-        border: "2px solid red",
         backgroundColor: background,
         gap: "8px",
         display: "flex",
-        flexDirection: "row"
+        flexDirection: "row",
+        boxShadow: "0 4px 8px 0 rgba(0,0,0,0.2)",
+        padding: "8px",
     }}>
       <Container sx={{
         display: "flex",
