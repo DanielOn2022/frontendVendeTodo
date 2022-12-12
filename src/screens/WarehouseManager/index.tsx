@@ -5,7 +5,7 @@ export function WarehouseManager(props:any) {
     
     return (
         <Container maxWidth={false} disableGutters style={{ background: "white", paddingBottom: 24}}>
-          <Appbar/> 
+          <Appbar searchedProduct="" /> 
           <Typography variant="h1" >Warehouse</Typography>
         </Container>
     );

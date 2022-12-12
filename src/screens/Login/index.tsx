@@ -38,6 +38,7 @@ export function Login(props: any) {
     });
     if (!loggedUser) return;
     localStorage.setItem("token", loggedUser.data.loginEmployee.token);
+    localStorage.setItem("name", loggedUser.data.loginEmployee.name);
     const role = loggedUser.data.loginEmployee.role;
     if (role == "suplier") {
       navigation?.navigate("Supplier");

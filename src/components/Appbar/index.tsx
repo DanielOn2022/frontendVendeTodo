@@ -97,7 +97,7 @@ export function Appbar(props: any) {
               alignItems="center"
               spacing={2}
             >
-              <Typography>{userData.logedIn.name}</Typography>
+              <Typography>{localStorage.getItem("name")}</Typography>
               <Button variant="text" sx={styles.button} onClick={onLogout}>
                 Logout
               </Button>
