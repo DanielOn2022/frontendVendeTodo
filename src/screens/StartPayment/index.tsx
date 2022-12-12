@@ -1,61 +1,59 @@
-import { AppBar, Button, Container, Grid, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useQuery } from "@apollo/client";
+import { AppBar, Button, CircularProgress, Container, FormControl, Grid, TextField, Typography } from "@mui/material";
+import { useEffect, useRef, useState } from "react";
 import { Appbar } from "../../components/Appbar";
 import { LineCard } from "../../components/LineCard";
 import { SaleLine } from "../../domain/SaleLine/SaleLine";
+import PaymentMethod from "./Components/PaymentMethod";
+import ProductDescription from "./Components/ProductDescription";
+import { getPaymentMethod } from "./queries";
 
 export function StartPayment(props: any) {
-  const { lines } = props.route.params;
-  const [ count, setCount ] = useState(0);
-  const [ error, setError ] = useState(false);
-  const [ productsChange, setProductsChanges ] = useState<SaleLine[]>([]);
+  const { lines, total, userId } = props.route.params;
+  const cardNumberRef = useRef<HTMLInputElement>();
+  const cvvRef = useRef<HTMLInputElement>();
+  const expirationRef = useRef<HTMLInputElement>();
+  const [paymentsMethod, setPaymentMethods] = useState([]);
+  const [selectedPayment, setSelectedMethod] = useState([]);
+  const { data, error, loading } = useQuery(getPaymentMethod);
 
   useEffect(() => {
-    const products: SaleLine[] = [];
-    console.log("🚀", lines);
-    lines.forEach((productLine: SaleLine) => {
-      const { product } = productLine;
-      if (product?.stock && product.stock < productLine.amount) {
-        setError(true);
-        productLine.amount = product.stock >= 0 ? product.stock : 0;
-        products.push(productLine);
-      }
-    });
-    console.log("🚀 ~ file: index.tsx:22 ~ lines.forEach ~ lines", lines)
-    setProductsChanges(products);
-  }, []);
+    if (data) {
+      setPaymentMethods(data.getPaymentMethods);
+      console.log("🚀 ~ file: index.tsx:24 ~ useEffect ~ data.getPaymentMethod", data.getPaymentMethods)
+    }
+  }, [data, loading]);
 
-  const handleOnRemoveCartLine = () => console.log("🚀 Hi thereeeee");
-
-  if (error) {
-    return (
-      <Container sx={{margin: 16}}>
-        This elements change
-        {productsChange.map((line) => 
-          <Container>
-            <Typography>Here we go</Typography>
-              <Grid item xs={4}>
-              <LineCard line={line} onRemoveLine={handleOnRemoveCartLine} />
-          </Grid>
-          </Container>
-        )}
-        <Button variant="outlined">Continuar</Button>
-        <Button variant="outlined">Cancelar</Button>
-      </Container>
-    )
+  const handleOnClickSelect = (e: any) => {
+    console.log("🚀 ~ file: index.tsx:28 ~ handleOnClickSelect ~ key", e)
+    //setSelectedMethod(key);
   }
   return (
     <Container
       maxWidth={false}
       disableGutters
-      sx={{ background: "#fff", margin: 16 }}
+      sx={{ background: "#fff", marginTop: 16 }}
     >
       <Appbar searchedProduct={""} />
-      {count}
-      <Button
-        variant="outlined"
-        onClick={() => setCount(count+1)}
-      >click Me!</Button>
+      <Grid container spacing={2}>
+        <Grid item xs={6} sx={{border: "1px solid red", padding: 8}}>
+          {lines.map((line: any) =>
+              <ProductDescription line={line}></ProductDescription>
+            )}
+        <Typography>Total: {total}</Typography>
+        </Grid>
+        <Grid item xs={6} sx={{border: "1px solid red", padding: 8}}>
+          {loading || !paymentsMethod ? (
+            <CircularProgress />
+          ) : 
+          (
+            <FormControl sx={{display: 'flex', grap: 4}}>
+              <Typography>Select your payment method</Typography>
+              {paymentsMethod.map((payment: any) => <PaymentMethod lastDigits={payment.cardNumber as number} handleOnClickSelect={handleOnClickSelect} ></PaymentMethod>)}
+          </FormControl>
+          )}
+        </Grid>
+</Grid>
     </Container>
   )
 }
