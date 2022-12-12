@@ -30,7 +30,7 @@ export function CartList(props: any) {
   const [cart, setCart] = useState<ShoppingCart | null>(null);
   const [open, setOpen] = useState(false);
 
-  const { data: userCart, error: errorCart, loading } = useQuery(getCart);
+  const { data: userCart, error: errorCart, loading } = useQuery(getCart, {fetchPolicy:"network-only", nextFetchPolicy:"network-only"});
   const [removeCartLine] = useMutation(removeLineCart);
   const [payCart, { data: paymentData }] = useMutation(startPayment);
   const [cancelPayCart] = useMutation(cancelStartPayment);

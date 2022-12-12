@@ -10,7 +10,7 @@ export function ProductList (props:any) {
   var products: Product[] = [];
   var searchedProduct = props.searchedProduct;
   
-  const { data: allProductsData, loading } = useQuery(GetProductsByName,{variables:{name:searchedProduct}});
+  const { data: allProductsData, loading } = useQuery(GetProductsByName,{variables:{name:searchedProduct}, fetchPolicy:"network-only"});
 
   if (allProductsData) {
     products = allProductsData.getProductsByName.map(
