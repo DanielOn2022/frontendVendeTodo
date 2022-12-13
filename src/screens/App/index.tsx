@@ -9,12 +9,13 @@ import { Home } from "../Home";
 import { Login } from "../Login";
 import { Signin } from "../Signin";
 import { ProductDetail } from "../ProductDetail";
-import { Supplier } from "../SupplierHome";
+import { PackerHome } from "../PackerHome";
 import { ShoppingCart } from "../ShoppingCart";
 import { StartPayment } from "../StartPayment";
 import { WarehouseManagerHome } from "../WarehouseManagerHome";
 import { ShelfManager } from "../ShelfManagerHome";
 import { ShelfsDetail } from "../ShelfsDetail";
+import { SaleLinesDetail } from "../SaleLinesDetail";
 
 
 function App() {
@@ -65,12 +66,16 @@ function App() {
               />
             </Stack.Navigator>
           )}
-          {role && role == "suplier" && (
-            <Stack.Navigator initialRouteName="suplier">
+          {role && role == "packer" && (
+            <Stack.Navigator initialRouteName="packer">
               <Stack.Screen name="Signin" component={Signin} />
               <Stack.Screen
-                name="suplier"
-                component={Supplier}
+                name="packer"
+                component={PackerHome}
+              />
+              <Stack.Screen
+                name="SaleLinesDetail"
+                component={SaleLinesDetail}
               />
             </Stack.Navigator>
           )}
