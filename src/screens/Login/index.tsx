@@ -37,7 +37,11 @@ export function Login(props: any) {
     const loggedUser = await employeeLogin({
       variables: { email, password },
     });
-    if (!loggedUser) return;
+    if (!loggedUser){
+      localStorage.clear();
+       return;
+    }
+    console.log("USEER -> ",loggedUser.data.loginEmployee)
     localStorage.setItem("token", loggedUser.data.loginEmployee.token);
     localStorage.setItem("name", loggedUser.data.loginEmployee.name);
     localStorage.setItem("role", loggedUser.data.loginEmployee.role);

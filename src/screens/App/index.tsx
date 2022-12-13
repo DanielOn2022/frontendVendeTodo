@@ -12,7 +12,7 @@ import { ProductDetail } from "../ProductDetail";
 import { Supplier } from "../SupplierHome";
 import { ShoppingCart } from "../ShoppingCart";
 import { StartPayment } from "../StartPayment";
-import { WarehouseManager } from "../WarehouseManagerHome";
+import { WarehouseManagerHome } from "../WarehouseManagerHome";
 import { ShelfManager } from "../ShelfManagerHome";
 import { ShelfsDetail } from "../ShelfsDetail";
 
@@ -50,25 +50,12 @@ function App() {
               />
             </Stack.Navigator>
           )}
-          {role && role == "warehouse_manager" && (
+          {role && (role == "warehouse_manager"||role == "shelf_manager") && (
             <Stack.Navigator initialRouteName="warehouse_manager">
               <Stack.Screen name="Signin" component={Signin} />
               <Stack.Screen
                 name="warehouse_manager"
-                component={WarehouseManager}
-              />
-              <Stack.Screen
-                name="ShelfsDetail"
-                component={ShelfsDetail}
-              />
-            </Stack.Navigator>
-          )}
-          {role && role == "shelf_manager" && (
-            <Stack.Navigator initialRouteName="shelf_manager">
-              <Stack.Screen name="Signin" component={Signin} />
-              <Stack.Screen
-                name="shelf_manager"
-                component={ShelfManager}
+                component={WarehouseManagerHome}
               />
               <Stack.Screen
                 name="ShelfsDetail"

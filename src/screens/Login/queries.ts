@@ -39,8 +39,8 @@ export const login = gql`
 `;
 
 export const loginEmployee = gql`
-  mutation loginemployee {
-    loginEmployee(email: "waldo@hotmail.com", password: "waldo123") {
+  mutation loginemployee ($email:String!, $password:String!){
+    loginEmployee(email:$email, password:$password) {
       id
       name
       cellphone

@@ -14,13 +14,13 @@ import { islogged } from "./queries";
 export function Appbar(props: any) {
   const navigation = useContext(NavigationContext);
   const [searchText, setsearchText] = useState(props.searchedProduct);
-  const { data: userData, error } = useQuery(islogged, {
+  const { data: userData, error, loading } = useQuery(islogged, {
     fetchPolicy: "network-only",
   });
 
   useEffect(() => {
-    if (userData) {
-      localStorage.setItem("token", userData.logedIn.token);
+    if (!loading && userData.logedIn) {
+      localStorage.setItem("token", userData.logedIn?.token);
     }
   }, [userData]);
 
@@ -71,13 +71,16 @@ export function Appbar(props: any) {
             <Button onClick={navigateHome}>
               <img src={logo} style={{ height: 50, width: 100 }} />
             </Button>
-            <Button
+            {!localStorage.getItem("role") && (
+              <Button
               variant="text"
               sx={styles.button}
               onClick={navigateLoginAsEmployee}
             >
               Employees
             </Button>
+            )}
+            
           </Stack>
           {!localStorage.getItem("role") && (
             <Stack direction="row" justifyContent="center" alignItems="center">

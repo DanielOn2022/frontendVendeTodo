@@ -2,7 +2,7 @@ import { Button, Container, Stack, Typography } from "@mui/material";
 import { Appbar } from "../../components/Appbar";
 import { EmployeeInfo } from "../../components/EmployeeInfo";
 
-export function WarehouseManager({ navigation }: { navigation: any }) {
+export function WarehouseManagerHome({ navigation }: { navigation: any }) {
   const onSeeShelfs = () => {
     navigation.navigate("ShelfsDetail");
   };
