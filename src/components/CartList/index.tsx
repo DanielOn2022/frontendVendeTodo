@@ -37,17 +37,18 @@ export function CartList(props: any) {
   const navigation = useContext(NavigationContext);
 
   const handleKeepBuying = () => {
+    setOpen(false);
     navigation?.navigate("Checkout", {
-      lines: paymentData?.startPayment.availableLines,
+      shoppingCart: paymentData.startPayment.shoppingCart,
+      availableLines: paymentData.startPayment.availableLines,
+      total: paymentData.startPayment.total
     });
   };
 
   const handleDiscardPayment = async () => {
-    console.log("DATA PAYMENTINTENT->", paymentData);
     const lines = SaleLineFactory.createManyFromGraphql(
       paymentData?.startPayment.availableLines
     );
-    console.log("DOM LINES->", lines);
     await cancelPayCart({
       variables: {
         availableLines: SaleLineFactory.createManyForGraphql(lines),
@@ -80,13 +81,10 @@ export function CartList(props: any) {
   };
 
   const handleOnCheckout = async () => {
-    console.log("payment->");
     try {
-      console.log("cart->", cart);
       const graphqlCart = ShoppingCartFactory.createForGrapqhl(
         cart as ShoppingCart
       );
-      console.log("params->", graphqlCart);
       const response = await payCart({
         variables: {
           cart: graphqlCart,
@@ -95,11 +93,10 @@ export function CartList(props: any) {
       response.data?.startPayment.nonAvailableLines.length
         ? setOpen(true)
         : navigation?.navigate("Checkout", {
-            lines: response.data.startPayment.availableLines.map((line:SaleLine)=>{
-              ShoppingCartFactory.createFromGraphql(line)
-            }),
+            shoppingCart: response.data.startPayment.shoppingCart,
+            availableLines: response.data.startPayment.availableLines,
+            total: response.data.startPayment.total
           });
-      console.log("ResponsePayCart->>", response);
     } catch (error) {
       console.log("error->", error);
     }
@@ -111,7 +108,6 @@ export function CartList(props: any) {
     }
   }, [userCart]);
 
-  console.log("CART", cart);
   return (
     <Container maxWidth="xl">
       <Stack spacing={4} marginBottom={16}>

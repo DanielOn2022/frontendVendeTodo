@@ -3,12 +3,13 @@ import { Container } from "@mui/system";
 
 
 const ShippingAddress = (props: any) => {
-  const { id, city, street, externalNumber, internalNumber, handleOnClickSelect, selectedAddress } = props;
+  const { id, city, street, externalNumber, internalNumber, handleOnClickSelect, selectedAddress, address } = props;
   const handleOnClick = () => {
-    handleOnClickSelect(id);
+    handleOnClickSelect(address);
   }
   
-  const background = id === selectedAddress ? "#AAA" : "#fff";
+  const selectedId = selectedAddress ? selectedAddress.id : null;
+  const background = id === selectedId ? "#AAA" : "#fff";
   return (
     <Container sx={{
         gap: "8px",

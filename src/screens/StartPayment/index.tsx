@@ -19,8 +19,7 @@ import {
 } from "./queries";
 
 export function StartPayment(props: any) {
-  const { lines, total } = props.route.params;
-  console.log('----------------------', lines, total)
+  const { shoppingCart, availableLines, total } = props.route.params;
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [error, setError] = useState(false);
@@ -38,8 +37,12 @@ export function StartPayment(props: any) {
       return;
     }
     try {
+      console.log('selectedAddress => ', availableLines)
       const response = await mutationPay({
-        variables: lines,
+        variables: {
+          paymentMethod: parseInt((selectedPayment as any).cardNumber),
+          shippingAddress: (selectedAddress as any).id,
+        }
       });
       navigation?.navigate("Home");
     } catch (error: any) {
@@ -50,13 +53,12 @@ export function StartPayment(props: any) {
   };
   const handleOnClickCancel = async () => {
     try {
-      const graphqlLines = SaleLineFactory.createManyFromGraphql(lines);
+      const graphqlLines = SaleLineFactory.createManyFromGraphql(shoppingCart.cartLines);
       const response = await mutationCancel({
         variables: {
           availableLines: SaleLineFactory.createManyForGraphql(graphqlLines),
         },
       });
-      //console.log("🚀 ~ file: index.tsx:43 ~ handleOnClickCancel ~ response",response);
     } catch (e) {
       console.log(e);
     } finally {
@@ -67,6 +69,7 @@ export function StartPayment(props: any) {
     setError(false);
     setErrorDescription('');
   }
+
   return (
     <Container
       maxWidth={false}
@@ -77,7 +80,7 @@ export function StartPayment(props: any) {
       <Grid container spacing={2}>
         <Grid item xs={6} sx={{ display: "flex", flexDirection: "column", alignItems: "center",  gap: "8px",  padding: "64px" }}>
         <Typography>You are going to buy</Typography>
-          {lines.map((line: any) => (
+          {shoppingCart.cartLines.map((line: any) => (
             <ProductDescription line={line}></ProductDescription>
           ))}
           <Typography>Total: {total}</Typography>

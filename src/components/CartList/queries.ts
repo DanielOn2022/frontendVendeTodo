@@ -145,7 +145,7 @@ export const startPayment = gql`
       }
       total
       shoppingCart {
-        id lastUpdate cartLines {cart_sale_id saleLineId product {id name brand price volume imageUrl description suppliers {id company}}
+        id lastUpdate cartLines {cart_sale_id saleLineId subTotal product {id name brand price volume imageUrl description suppliers {id company}}
         supplierId batchId amount price supplier {id company}} total
       }
     }

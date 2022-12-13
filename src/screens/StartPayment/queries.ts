@@ -46,14 +46,12 @@ export const cancelStartPayment = gql`
 
 export const authorizePayment = gql`
 mutation authorizePayment(
-  $paymentMethod:PaymentMethodIn
-  $shoppingCart: ShopppingCart
-  $shippingAddress: ShippingAddressIn
+  $paymentMethod: Int!
+  $shippingAddress: Int!
   ) {
   authorizePayment(
-    paymentMethod: $paymentMethod
-    shippingAddress: shippingAddress
-    shoppingCart: shoppingCart
+    paymentMethod: $paymentMethod,
+    shippingAddress: $shippingAddress,
   ) {
     sale {
       id

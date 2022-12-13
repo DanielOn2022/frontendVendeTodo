@@ -1,18 +1,19 @@
 import { Button, Container, Typography } from "@mui/material";
 
 interface Props {
-  lastDigits: number,
+  lastDigits: any,
   handleOnClickSelect: (e: any) => void,
-  selectedPayment: number
+  selectedPayment: any,
+  paymentMethod: any;
 }
 const PaymentMethod = (props: Props) => {
-  const { lastDigits, handleOnClickSelect, selectedPayment } = props;
+  const { lastDigits, handleOnClickSelect, selectedPayment, paymentMethod } = props;
   const handleOnClick = () => {
-    handleOnClickSelect(lastDigits);
+    handleOnClickSelect(paymentMethod);
   }
   console.log("🚀 ~ file: PaymentMethod.tsx:15 ~ PaymentMethod ~ selectedPayment", typeof selectedPayment)
-  
-  const background = lastDigits === selectedPayment ? "#AAA" : "#fff";
+  const selectedCartNumber = selectedPayment ? selectedPayment.cardNumber : null;
+  const background = lastDigits === selectedCartNumber ? "#AAA" : "#fff";
   return (
     <Container sx={{
         backgroundColor: background,
