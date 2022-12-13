@@ -16,6 +16,7 @@ import { WarehouseManagerHome } from "../WarehouseManagerHome";
 import { ShelfManager } from "../ShelfManagerHome";
 import { ShelfsDetail } from "../ShelfsDetail";
 
+
 function App() {
   useEffect(() => {
     document.title = "Vende Todo";
@@ -29,6 +30,7 @@ function App() {
     <ApolloProvider {...{ client }}>
       <ThemeProvider theme={theme}>
         <NavigationContainer>
+
           {!role && (
             <Stack.Navigator initialRouteName="Home">
               <Stack.Screen name="Signin" component={Signin} />
