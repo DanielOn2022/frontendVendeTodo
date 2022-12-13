@@ -3,15 +3,15 @@ import { iEntity } from "../iEntity";
 import { Supplier } from "../Supplier/Supplier";
 
 export class Product implements iEntity {
-  private readonly id?: number | null;
-  private name: string;
-  private description?: string | null;
-  private brand?: string | null;
-  private price: number;
-  private volume?: number | null;
-  private imageUrl: string;
-  private stock?: number | null;
-  private suppliers?: Array<Supplier> | [];
+  readonly id?: number | null;
+  name: string;
+  description?: string | null;
+  brand?: string | null;
+  price: number;
+  volume?: number | null;
+  imageUrl: string;
+  stock?: number | null;
+  suppliers?: Array<Supplier> | [];
 
   constructor(data: {
     id?: number | null;

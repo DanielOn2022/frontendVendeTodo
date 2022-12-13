@@ -39,6 +39,7 @@ export function CartList(props: any) {
   const handleKeepBuying = () => {
     navigation?.navigate("Checkout", {
       lines: paymentData?.startPayment.availableLines,
+      
     });
   };
 
@@ -96,8 +97,9 @@ export function CartList(props: any) {
         ? setOpen(true)
         : navigation?.navigate("Checkout", {
             lines: response.data.startPayment.availableLines,
+            total: response.data.startPayment.total
           });
-      console.log("ResponsePayCart->>", response);
+      console.log("🚀 ResponsePayCart->>", response);
     } catch (error) {
       console.log("error->", error);
     }

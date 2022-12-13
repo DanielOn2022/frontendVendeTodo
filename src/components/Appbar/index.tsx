@@ -32,7 +32,7 @@ export function Appbar(props: any) {
     navigation?.navigate("Signin");
   };
   const navigateHome = () => {
-    navigation?.navigate("Home", { searchedProduct: searchText });
+    navigation?.navigate("Home", { searchedProduct: "" });
   };
   const navigateCart = () => {
     navigation?.navigate("ShoppingCart");
