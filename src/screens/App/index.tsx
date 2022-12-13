@@ -11,7 +11,6 @@ import { Signin } from "../Signin";
 import { ProductDetail } from "../ProductDetail";
 import { Suplier } from "../suplier";
 import { ShoppingCart } from "../ShoppingCart";
-import { StartPayment } from "../StartPayment";
 
 function App() {
   useEffect(() => {
@@ -35,7 +34,6 @@ function App() {
               component={ProductDetail}
               initialParams={{ product: undefined}}
             />
-            <Stack.Screen name="Checkout" component={StartPayment}/>
           </Stack.Navigator>
         </NavigationContainer>
       </ThemeProvider>
