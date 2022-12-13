@@ -20,6 +20,7 @@ import {
 
 export function StartPayment(props: any) {
   const { lines, total } = props.route.params;
+  console.log('----------------------', lines, total)
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [selectedAddress, setSelectedAddress] = useState(null);
   const [error, setError] = useState(false);
@@ -40,11 +41,12 @@ export function StartPayment(props: any) {
       const response = await mutationPay({
         variables: lines,
       });
+      navigation?.navigate("Home");
     } catch (error: any) {
       setError(true);
       const description: string = error?.message || error?.description || "Unexpected error, try to reload the page.";
       setErrorDescription(description);
-    }
+    } 
   };
   const handleOnClickCancel = async () => {
     try {
@@ -54,11 +56,11 @@ export function StartPayment(props: any) {
           availableLines: SaleLineFactory.createManyForGraphql(graphqlLines),
         },
       });
-      console.log("🚀 ~ file: index.tsx:43 ~ handleOnClickCancel ~ response",response);
+      //console.log("🚀 ~ file: index.tsx:43 ~ handleOnClickCancel ~ response",response);
     } catch (e) {
       console.log(e);
     } finally {
-      //navigation?.navigate("Home");
+      navigation?.navigate("Home");
     }
   };
   const handleOnCloseError = () => {
@@ -74,7 +76,7 @@ export function StartPayment(props: any) {
       <Appbar searchedProduct={""} />
       <Grid container spacing={2}>
         <Grid item xs={6} sx={{ display: "flex", flexDirection: "column", alignItems: "center",  gap: "8px",  padding: "64px" }}>
-        <Typography>List of products</Typography>
+        <Typography>You are going to buy</Typography>
           {lines.map((line: any) => (
             <ProductDescription line={line}></ProductDescription>
           ))}

@@ -1,6 +1,7 @@
 import { Button, Container, Divider, Stack, Typography } from "@mui/material";
 export function LineCard(props: any) {
   const line = props.line;
+  console.log(line);
   return (
     <Container>
       <Stack
@@ -17,7 +18,7 @@ export function LineCard(props: any) {
           <Typography variant="h4">{line.product.name}</Typography>
           <Stack direction="column" spacing={0.5}>
             <Typography variant="h6">Amount: {line.amount}</Typography>
-            <Typography variant="h6">Suplier: {line.supplierName}</Typography>
+            <Typography variant="h6">Supplier: {line.supplier.company}</Typography>
             <Typography variant="h6">
               <b>${line.subTotal}</b>
             </Typography>
