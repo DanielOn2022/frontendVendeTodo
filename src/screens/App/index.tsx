@@ -14,6 +14,7 @@ import { ShoppingCart } from "../ShoppingCart";
 import { StartPayment } from "../StartPayment";
 import { WarehouseManager } from "../WarehouseManagerHome";
 import { ShelfManager } from "../ShelfManagerHome";
+import { ShelfsDetail } from "../ShelfsDetail";
 
 function App() {
   useEffect(() => {
@@ -21,7 +22,9 @@ function App() {
   }, []);
 
   const Stack = createNativeStackNavigator();
+  //localStorage.setItem("role","");
   const role = localStorage.getItem("role");
+  //const role = ""
   return (
     <ApolloProvider {...{ client }}>
       <ThemeProvider theme={theme}>
@@ -47,25 +50,33 @@ function App() {
               />
             </Stack.Navigator>
           )}
-          {role == "warehouse_manager" && (
+          {role && role == "warehouse_manager" && (
             <Stack.Navigator initialRouteName="warehouse_manager">
               <Stack.Screen name="Signin" component={Signin} />
               <Stack.Screen
                 name="warehouse_manager"
                 component={WarehouseManager}
               />
+              <Stack.Screen
+                name="ShelfsDetail"
+                component={ShelfsDetail}
+              />
             </Stack.Navigator>
           )}
-          {role == "shelf_manager" && (
+          {role && role == "shelf_manager" && (
             <Stack.Navigator initialRouteName="shelf_manager">
               <Stack.Screen name="Signin" component={Signin} />
               <Stack.Screen
                 name="shelf_manager"
                 component={ShelfManager}
               />
+              <Stack.Screen
+                name="ShelfsDetail"
+                component={ShelfsDetail}
+              />
             </Stack.Navigator>
           )}
-          {role == "suplier" && (
+          {role && role == "suplier" && (
             <Stack.Navigator initialRouteName="suplier">
               <Stack.Screen name="Signin" component={Signin} />
               <Stack.Screen

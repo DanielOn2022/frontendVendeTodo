@@ -30,8 +30,6 @@ export function Login(props: any) {
     if (!loggedUser) return;
     localStorage.setItem("token", loggedUser.data.login.token);
     localStorage.setItem("name", loggedUser.data.login.name);
-    console.log("client logedin",loggedUser)
-    console.log("navigated")
     window.location.reload();
   };
 

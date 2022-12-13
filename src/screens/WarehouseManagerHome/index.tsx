@@ -2,7 +2,11 @@ import { Button, Container, Stack, Typography } from "@mui/material";
 import { Appbar } from "../../components/Appbar";
 import { EmployeeInfo } from "../../components/EmployeeInfo";
 
-export function WarehouseManager(props: any) {
+export function WarehouseManager({ navigation }: { navigation: any }) {
+  const onSeeShelfs = () => {
+    navigation.navigate("ShelfsDetail");
+  };
+
   return (
     <Container
       maxWidth={false}
@@ -12,7 +16,13 @@ export function WarehouseManager(props: any) {
       <Appbar searchedProduct="" />
       <Stack alignItems="center" justifyContent="center">
         <EmployeeInfo />
-        <Button sx={{marginY:16, width:"10%"}} variant="contained">See shelfs</Button>
+        <Button
+          sx={{ marginY: 8, marginX: 16, width: "10%" }}
+          variant="contained"
+          onClick={onSeeShelfs}
+        >
+          See shelfs
+        </Button>
       </Stack>
     </Container>
   );

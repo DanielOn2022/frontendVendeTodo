@@ -41,7 +41,7 @@ export function ProductInfo(props: any) {
 
   useEffect(() => {
     if (!loading) {
-      setsingleProduct(ProductFactory.createFromGraphql(ProductDetail));
+      setsingleProduct(ProductFactory.createFromGraphql(ProductDetail.singleProduct));
     }
   }, [loading])
 

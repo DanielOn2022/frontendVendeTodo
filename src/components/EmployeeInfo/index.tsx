@@ -19,10 +19,10 @@ export function EmployeeInfo(props: any) {
           </Typography>
           <Stack direction="column" alignItems="flex-start">
             <Typography variant="h6" color="text.secondary">
-              Role:<b>{localStorage.getItem("role")}</b>
+              Role: <b>{localStorage.getItem("role")}</b>
             </Typography>
             <Typography variant="h6" color="text.secondary" paddingY={0.5}>
-              cellphone: <b>{localStorage.getItem("cellphone")}</b>
+              cellphone: <b>{localStorage.getItem("cellphone")=="null"?"6672854176":localStorage.getItem("cellphone")}</b>
             </Typography>
             <Typography variant="h6" color="text.secondary" paddingY={0.5}>
               RFC: <b>{localStorage.getItem("rfc")}</b>
