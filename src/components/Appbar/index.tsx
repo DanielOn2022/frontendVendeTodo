@@ -34,7 +34,7 @@ export function Appbar(props: any) {
     navigation?.navigate("Signin");
   };
   const navigateHome = () => {
-    window.location.reload();
+    navigation?.navigate("Home", { searchedProduct: "" });
   };
   const navigateCart = () => {
     navigation?.navigate("ShoppingCart");

@@ -18,6 +18,8 @@ export function LineCard(props: any) {
         <Stack direction="column" spacing={2} minWidth="40%">
           <Typography variant="h4">{line.product.name}</Typography>
           <Stack direction="column" spacing={0.5}>
+            <Typography variant="h6">Amount: {line.amount}</Typography>
+            <Typography variant="h6">Supplier: {line.supplier.company}</Typography>
             <Typography variant="h6">
               Amount: <b>{line.amount}</b>
             </Typography>
