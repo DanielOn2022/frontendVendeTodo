@@ -37,3 +37,21 @@ export const login = gql`
     }
   }
 `;
+
+export const loginEmployee = gql`
+  mutation loginemployee ($email:String!, $password:String!){
+    loginEmployee(email:$email, password:$password) {
+      id
+      name
+      cellphone
+      rfc
+      email
+      token
+      city
+      street
+      externalNumber
+      internalNumber
+      role
+    }
+  }
+`;
