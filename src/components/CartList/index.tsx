@@ -95,7 +95,9 @@ export function CartList(props: any) {
       response.data?.startPayment.nonAvailableLines.length
         ? setOpen(true)
         : navigation?.navigate("Checkout", {
-            lines: response.data.startPayment.availableLines,
+            lines: response.data.startPayment.availableLines.map((line:SaleLine)=>{
+              ShoppingCartFactory.createFromGraphql(line)
+            }),
           });
       console.log("ResponsePayCart->>", response);
     } catch (error) {
