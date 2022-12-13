@@ -26,7 +26,7 @@ export function ProductInfo(props: any) {
   const [singleProduct, setsingleProduct] = useState<Product | null>(null);
   const [cart, setCart] = useState<ShoppingCart | null>(null);
   const [addCartLine, { data: addedCartLine }] = useMutation(addToCart);
-  const { data: userCart } = useQuery(getCart);
+  const { data: userCart } = useQuery(getCart, {fetchPolicy:"network-only"});
   const { data: userData } = useQuery(islogged, {
     fetchPolicy: "network-only",
   });
@@ -41,7 +41,7 @@ export function ProductInfo(props: any) {
 
   useEffect(() => {
     if (!loading) {
-      setsingleProduct(ProductFactory.createFromGraphql(ProductDetail));
+      setsingleProduct(ProductFactory.createFromGraphql(ProductDetail.singleProduct));
     }
   }, [loading])
 

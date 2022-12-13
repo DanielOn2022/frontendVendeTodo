@@ -9,8 +9,13 @@ import { Home } from "../Home";
 import { Login } from "../Login";
 import { Signin } from "../Signin";
 import { ProductDetail } from "../ProductDetail";
-import { Suplier } from "../suplier";
+import { Supplier } from "../SupplierHome";
 import { ShoppingCart } from "../ShoppingCart";
+import { StartPayment } from "../StartPayment";
+import { WarehouseManagerHome } from "../WarehouseManagerHome";
+import { ShelfManager } from "../ShelfManagerHome";
+import { ShelfsDetail } from "../ShelfsDetail";
+
 
 function App() {
   useEffect(() => {
@@ -18,23 +23,57 @@ function App() {
   }, []);
 
   const Stack = createNativeStackNavigator();
-
+  //localStorage.setItem("role","");
+  const role = localStorage.getItem("role");
+  //const role = ""
   return (
     <ApolloProvider {...{ client }}>
       <ThemeProvider theme={theme}>
         <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen name="Signin" component={Signin} />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Home" component={Home} initialParams={{ searchedProduct:"" }} />
-            <Stack.Screen name="Suplier" component={Suplier} />
-            <Stack.Screen name="ShoppingCart" component={ShoppingCart}></Stack.Screen>
-            <Stack.Screen
-              name="ProductDetail"
-              component={ProductDetail}
-              initialParams={{ product: undefined}}
-            />
-          </Stack.Navigator>
+
+          {!role && (
+            <Stack.Navigator initialRouteName="Home">
+              <Stack.Screen name="Signin" component={Signin} />
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen
+                name="Home"
+                component={Home}
+                initialParams={{ searchedProduct: "" }}
+              />
+              <Stack.Screen
+                name="ShoppingCart"
+                component={ShoppingCart}
+              ></Stack.Screen>
+              <Stack.Screen name="Checkout" component={StartPayment} />
+              <Stack.Screen
+                name="ProductDetail"
+                component={ProductDetail}
+                initialParams={{ product: undefined }}
+              />
+            </Stack.Navigator>
+          )}
+          {role && (role == "warehouse_manager"||role == "shelf_manager") && (
+            <Stack.Navigator initialRouteName="warehouse_manager">
+              <Stack.Screen name="Signin" component={Signin} />
+              <Stack.Screen
+                name="warehouse_manager"
+                component={WarehouseManagerHome}
+              />
+              <Stack.Screen
+                name="ShelfsDetail"
+                component={ShelfsDetail}
+              />
+            </Stack.Navigator>
+          )}
+          {role && role == "suplier" && (
+            <Stack.Navigator initialRouteName="suplier">
+              <Stack.Screen name="Signin" component={Signin} />
+              <Stack.Screen
+                name="suplier"
+                component={Supplier}
+              />
+            </Stack.Navigator>
+          )}
         </NavigationContainer>
       </ThemeProvider>
     </ApolloProvider>

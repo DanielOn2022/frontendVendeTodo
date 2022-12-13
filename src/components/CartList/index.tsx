@@ -30,7 +30,7 @@ export function CartList(props: any) {
   const [cart, setCart] = useState<ShoppingCart | null>(null);
   const [open, setOpen] = useState(false);
 
-  const { data: userCart, error: errorCart, loading } = useQuery(getCart);
+  const { data: userCart, error: errorCart, loading } = useQuery(getCart, {fetchPolicy:"network-only", nextFetchPolicy:"network-only"});
   const [removeCartLine] = useMutation(removeLineCart);
   const [payCart, { data: paymentData }] = useMutation(startPayment);
   const [cancelPayCart] = useMutation(cancelStartPayment);
@@ -112,11 +112,10 @@ export function CartList(props: any) {
   console.log("CART", cart);
   return (
     <Container maxWidth="xl">
-      <Stack spacing={4}>
+      <Stack spacing={4} marginBottom={16}>
         {!loading && cart?.getLines()?.length ? (
           <Container>
             <Stack
-              paddingBottom={8}
               paddingX={16}
               alignItems="center"
               direction="row"
@@ -147,7 +146,7 @@ export function CartList(props: any) {
           </Stack>
         )}
         {cart?.snapshot.saleLines?.map((line: any) => (
-          <Grid item xs={4}>
+          <Grid item xs={4} spacing={0} >
             <LineCard line={line} onRemoveLine={handleOnRemoveCartLine} />
           </Grid>
         ))}
