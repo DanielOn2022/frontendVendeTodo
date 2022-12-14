@@ -1,12 +1,28 @@
+import { useMutation } from "@apollo/client";
 import { Button, Container, Stack, Typography } from "@mui/material";
 import { Appbar } from "../../components/Appbar";
 import { EmployeeInfo } from "../../components/EmployeeInfo";
+import { beginSupply } from '../../components/SalesList/queries'
+import { Packer } from "../../domain/Packer/Packer";
+import { PackingRoute } from "../../domain/PackingRoute/PackingRoute";
+import { Product } from "../../domain/Product/Product";
 
 export function PackerHome({ navigation }: { navigation: any }) {
 
-  const onBeginSupply = () => {
-    navigation.navigate("SaleLinesDetail");
+  const [mutationBeginSupply] = useMutation(beginSupply);
+
+  const onBeginSupply = async () => {
+    console.log('Se abrio espacio para el pacjing route');  
+    const response = await mutationBeginSupply();
+    console.log(response.data.begginSupply);
+    const data = response.data.begginSupply;
+    
+    
   };
+
+  const onPendingSales = () => {
+    navigation.navigate("SaleLinesDetail");
+  }
 
   return (
     <Container
@@ -21,7 +37,7 @@ export function PackerHome({ navigation }: { navigation: any }) {
           <Button
             sx={{ marginY: 8, marginX: 16, width: "auto" }}
             variant="contained"
-            onClick={onBeginSupply}
+            onClick={onPendingSales}
           >
             Pending sales
           </Button>

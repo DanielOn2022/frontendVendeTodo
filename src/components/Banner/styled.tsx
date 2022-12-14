@@ -28,3 +28,8 @@ export const BannerContent = styled.div`
   justify-content: center;
   padding: 30px;
 `;
+
+export const BannerImage = styled.img`
+  height: 300px;
+  width: 75%;
+`;
