@@ -17,7 +17,7 @@ export function WarehouseManagerHome({ navigation }: { navigation: any }) {
       <Stack alignItems="center" justifyContent="center">
         <EmployeeInfo />
         <Button
-          sx={{ marginY: 8, marginX: 16, width: "10%" }}
+          sx={{ marginY: 8, marginX: 16, width: "auto" }}
           variant="contained"
           onClick={onSeeShelfs}
         >
